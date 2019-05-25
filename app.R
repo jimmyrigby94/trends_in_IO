@@ -80,7 +80,7 @@ ui <- fluidPage(titlePanel("Trends in Industrial-Organziational Psychology Journ
                                h4("Input"),
                                h4("Text Input: Enter in a set of words or terms separated by \", \" that you would like to track over time."),
                                
-                               h4("Minimum Match Count: No textmining procedure is perfect and Type I errors will occur. One way to reduce the number of false matches is to increase the number of times an article must have used the search terms
+                               h4("Minimum Match Count: No text mining procedure is perfect and Type I errors will occur. One way to reduce the number of false matches is to increase the number of times an article must have used the search terms
                                   to be included in the figures, data, and analysis. Changing the threshold paramter will reduce the number of articles that match your query."),
                                
                                h4("Plot by Journal: This option allows you to produce a plot that depicts trends in each journal separatley or plots the a general trend line for all journals."),
