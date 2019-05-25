@@ -26,6 +26,8 @@ and a regression results using the user’s search term to predict
 citation rate across the decades. Feel free to download and adapt the
 app how you see fit or submit a request and I will see if I can help.
 
+## How to Run
+
 To run the app without downloading the repository, simply run the
 following code.
 
@@ -43,6 +45,20 @@ setwd("~/shiny_example")
 runApp()
 ```
 
+## System Requirements
+
+In addition to R and R Studio this app depends on the following
+packages:
+
+    1. shiny
+    2. tidyverse
+    3. tidytext
+    4. plotly
+    5. knitr
+
 ## Screenshots
 
-![Trend by Publication Outlet](supl/journal%20trends.png)
+![Trend by Publication Outlet](supl/journal%20trends.png) ![Overall
+Trend](supl/general%20trends.png) ![Search Results](supl/dataset.png)
+![Regression Results](supl/poisson%20regression.png) ![Information
+Tab](supl/about.png)
