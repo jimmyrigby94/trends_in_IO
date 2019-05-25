@@ -42,3 +42,7 @@ code.
 setwd("~/shiny_example")
 runApp()
 ```
+
+## Screenshots
+
+![Trend by Publication Outlet](supl/journal%20trends.png)
