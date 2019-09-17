@@ -33,12 +33,30 @@ In addition to R and R Studio this app depends on the following packages:
     3. tidytext
     4. plotly
     5. knitr
+    6. vroom
+
+## What's New?
+- Expanded the database coverage to include more than 30 new journals.
+- Included visualizations of citation rates.
+- Implemented data import using vroom for increased speed.
+- Updated UI.
+- Other improvements.
+
+## Future Improvements
+- Refinement of visualizations and UI.
+- Action buttons that quickly select a subcategory of journals (i.e., Research Methods).
+- Identification of emerging subtopics related to search.
 
 ## Screenshots
+
+![Overview](supl/Overview.png)
+
+![Instructions](supl/Instructions.png)
 
 ![Trend by Publication Outlet](supl/journal trends.png)
 ![Overall Trend](supl/general trends.png)
 ![Search Results](supl/dataset.png)
 ![Regression Results](supl/poisson regression.png)
-![Information Tab](supl/about.png)
+![Journal Selection](supl/journal selection.png)
+
 

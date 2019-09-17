@@ -55,10 +55,30 @@ packages:
     3. tidytext
     4. plotly
     5. knitr
+    6. vroom
+
+## What’s New?
+
+  - Expanded the database coverage to include more than 30 new journals.
+  - Included visualizations of citation rates.
+  - Implemented data import using vroom for increased speed.
+  - Updated UI.
+  - Other improvements.
+
+## Future Improvements
+
+  - Refinement of visualizations and UI.
+  - Action buttons that quickly select a subcategory of journals (i.e.,
+    Research Methods).
+  - Identification of emerging subtopics related to search.
 
 ## Screenshots
 
+![Overview](supl/Overview.png)
+
+![Instructions](supl/Instructions.png)
+
 ![Trend by Publication Outlet](supl/journal%20trends.png) ![Overall
 Trend](supl/general%20trends.png) ![Search Results](supl/dataset.png)
-![Regression Results](supl/poisson%20regression.png) ![Information
-Tab](supl/about.png)
+![Regression Results](supl/poisson%20regression.png) ![Journal
+Selection](supl/journal%20selection.png)
