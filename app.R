@@ -465,6 +465,7 @@ server <- function(input, output, session) {
   
 
 # Handler for select all and deselect all ---------------------------------
+  # One observe context for deselect
   i<-0
   observe({
     if (input$deselectall > i) {
@@ -477,8 +478,8 @@ server <- function(input, output, session) {
     }
   })
   
+  # One observe context for select
   j<-0
-  
   observe({
     if(input$selectall > j){
       updateCheckboxGroupInput(session=session, 
