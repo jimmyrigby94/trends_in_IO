@@ -10,7 +10,8 @@ cite_plot <- function(data, date, group, unigram, threshhold) {
   
   # frequency counts for term/phrase matches per article
   plot_dat<-data %>% mutate(word_freq = str_count(string = data$Abstract, pattern = unigram1),
-                           Present = if_else(word_freq >= threshhold, "Present", "Absent")) %>%
+                           Present = if_else(word_freq >= threshhold, "Present", "Absent"),
+                           Present = factor(Present, levels = c("Present", "Absent"))) %>%
     group_by(Year, Present)%>%
     summarise(`Citation Rate` = round(mean(`Cited by`, na.rm = TRUE),2))
     

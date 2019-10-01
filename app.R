@@ -148,7 +148,7 @@ ui <- fluidPage(
             "Please note that this app is currently in Beta, and there are still a few bugs
              that need to be resolved.  If you encounter any errors or have suggestions, please
              feel free to contact the author below."
-          ),
+          )
         ),
 
 
