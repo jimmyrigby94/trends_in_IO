@@ -5,8 +5,8 @@ account: jrigby
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 362221
-bundleId: 2459540
+bundleId: 2459652
 url: https://jrigby.shinyapps.io/Trends_in_IO/
-when: 1569946776.9166
+when: 1569949740.1911
 asMultiple: FALSE
 asStatic: FALSE

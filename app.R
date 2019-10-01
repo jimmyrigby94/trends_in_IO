@@ -134,7 +134,7 @@ ui <- fluidPage(
 
   titlePanel(div( h1("Trends in Industrial-Organizational Psychology and Related Journals"),
                   h3(span("By"),
-                     a("James Rigby, M.A., University of Houston", href = "mailto:jrigby@uh.edu"),
+                     em(a("James Rigby, M.A., University of Houston", href = "mailto:jrigby@uh.edu")),
                      span("and"),
                      em(a("Zach Traylor, M.S., Texas A & M", href = "mailto:zktraylor@gmail.com"))
                   ))),
