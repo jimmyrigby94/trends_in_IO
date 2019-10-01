@@ -57,7 +57,7 @@ ui <- fluidPage(
         label = "Published after",
         min = 1930,
         max = 2019,
-        value = 1930,
+        value = c(1930, 2019),
         sep = ""
       ),
       
@@ -382,7 +382,8 @@ server <- function(input, output) {
         data = master[master$`Source title` %in% input$journal,],
         unigram = input$oneword,
         threshhold = input$cutoff,
-        since = input$yearrange
+        upper_year = input$yearrange[2],
+        lower_year = input$yearrange[1]
       )
     })
   
@@ -394,7 +395,8 @@ server <- function(input, output) {
         data = master[master$`Source title` %in% input$journal,],
         unigram = input$oneword,
         threshhold = input$cutoff,
-        since = input$yearrange
+        upper_year = input$yearrange[2],
+        lower_year = input$yearrange[1]
       )
     })
   
@@ -423,7 +425,8 @@ server <- function(input, output) {
         threshhold = input$cutoff,
         prop = input$prop,
         byjourn = input$journ,
-        since = input$yearrange
+        upper_year = input$yearrange[2],
+        lower_year = input$yearrange[1]
       )
     })
   

@@ -1,5 +1,5 @@
 # preps the table
-table_prep <- function(data, unigram, threshhold, since) {
+table_prep <- function(data, unigram, threshhold, upper_year, lower_year) {
 
   # preps unigram for search
   unigram1 <- str_replace_all(unigram, pattern = ", ", "|") %>% tolower()
@@ -9,7 +9,7 @@ table_prep <- function(data, unigram, threshhold, since) {
 
   # imposing filters, arranging by relevance, & calculating relative citation rates
   temp <- cbind(data, count) %>%
-          filter(Year > since, `Matching Terms` >= threshhold) %>%
+          filter(Year > lower_year, Year < upper_year, `Matching Terms` >= threshhold) %>%
           arrange(desc(`Matching Terms`)) %>%
           select(Authors:Issue, EID, `Matching Terms`, `Cited by`:Link) %>%
           group_by(Year) %>%

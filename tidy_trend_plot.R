@@ -1,4 +1,4 @@
-tidy_trend_plot <- function(data, date, group, unigram, threshhold, prop, byjourn, since) {
+tidy_trend_plot <- function(data, date, group, unigram, threshhold, prop, byjourn, upper_year, lower_year) {
 
   #tidy eval quasi-quotation
   date1 <- enquo(date)
@@ -27,7 +27,7 @@ tidy_trend_plot <- function(data, date, group, unigram, threshhold, prop, byjour
   if (byjourn == TRUE) {
 
     # generates plot by journal
-    ggplotly(ggplot(temp %>% filter(Year > since),
+    ggplotly(ggplot(temp %>% filter(Year > lower_year, Year < upper_year),
                     aes(x = Year, y = Proportion)) +
                     geom_line(aes(color = Journal)) +
                     geom_point(aes(color = Journal))+
@@ -39,7 +39,7 @@ tidy_trend_plot <- function(data, date, group, unigram, threshhold, prop, byjour
   } else {
 
     # frequency counts are collapsed across journal and proportion is recalculated
-      ggplotly(temp %>% filter(Year > since) %>% ungroup %>% group_by(Year) %>%
+      ggplotly(temp %>% filter(Year > lower_year, Year < upper_year) %>% ungroup %>% group_by(Year) %>%
                summarise(Articles = sum(Articles, na.rm = TRUE),
                Published = sum(Published, na.rm = TRUE)) %>%
                mutate(Proportion = Articles / Published) %>%
@@ -68,7 +68,7 @@ tidy_trend_plot <- function(data, date, group, unigram, threshhold, prop, byjour
 
     # uses conditional logic to plot by journal or aggregation of all journals
     if (byjourn == TRUE) {
-          ggplotly(ggplot(temp %>% filter(Year > since),
+          ggplotly(ggplot(temp %>% filter(Year > lower_year, Year < upper_year),
                           aes(x = Year, y = Articles)) +
                           geom_line(aes(color = Journal)) +
                           geom_point(aes(color = Journal))+
@@ -80,7 +80,7 @@ tidy_trend_plot <- function(data, date, group, unigram, threshhold, prop, byjour
 
     } else {
 
-      ggplotly(temp %>% filter(Year > since) %>% ungroup %>%
+      ggplotly(temp %>% filter(Year > lower_year, Year < upper_year) %>% ungroup %>%
                group_by(Year) %>% summarise(Articles = sum(Articles)) %>%
                ggplot(aes(x = Year, y = Articles))+ 
                  geom_line() + 

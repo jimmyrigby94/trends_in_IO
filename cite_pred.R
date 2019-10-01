@@ -23,7 +23,9 @@ cite_pred <- function(data, date, group, unigram, threshhold) {
            group_by(decade) %>% nest() %>%
            mutate(Model = map(data, cited_by), tidy_lm = map(Model, tidy))
 
-  temp <- count %>% unnest(tidy_lm) %>%
+  temp <- count %>% 
+          unnest(tidy_lm) %>%
+          ungroup()%>%
           mutate(term = if_else(term == "(Intercept)", "Terms Not Present", "Terms Present")) %>%
           mutate_if(.predicate = is.numeric, funs(round), digits = 2)
 
