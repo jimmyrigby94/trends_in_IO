@@ -26,6 +26,25 @@ and a regression results using the user’s search term to predict
 citation rate across the decades. Feel free to download and adapt the
 app how you see fit or submit a request and I will see if I can help.
 
+## System Requirements
+
+In addition to R and R Studio this app depends on the following
+packages:
+
+    1. shiny
+    2. tidyverse
+    3. tidytext
+    4. plotly
+    5. knitr
+    6. vroom
+
+Dependencies can easily be installed and loaded by running the following
+code.
+
+``` r
+source("https://raw.githubusercontent.com/jimmyrigby94/trends_in_IO/master/install_dependencies.R")
+```
+
 ## How to Run
 
 To run the app without downloading the repository, simply run the
@@ -45,32 +64,23 @@ setwd("~/shiny_example")
 runApp()
 ```
 
-## System Requirements
-
-In addition to R and R Studio this app depends on the following
-packages:
-
-    1. shiny
-    2. tidyverse
-    3. tidytext
-    4. plotly
-    5. knitr
-    6. vroom
-
 ## What’s New?
 
   - Expanded the database coverage to include more than 30 new journals.
   - Included visualizations of citation rates.
   - Implemented data import using vroom for increased speed.
   - Updated UI.
-  - Other improvements.
+  - Aesthetic improvements.
+  - Code improvements and clarity.
 
 ## Future Improvements
 
-  - Refinement of visualizations and UI.
+  - Continuing refinement of visualizations and UI.
   - Action buttons that quickly select a subcategory of journals (i.e.,
     Research Methods).
   - Identification of emerging subtopics related to search.
+  - Implementation of TF-IDF ranking
+  - Outlet recommendations
 
 ## Screenshots
 
