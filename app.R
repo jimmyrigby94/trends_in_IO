@@ -27,7 +27,7 @@ ui <- fluidPage(
     type = "text/css",
     ".shiny-output-error { visibility: hidden; }",
     ".shiny-output-error: before { visibility: hidden; }",
-    "h2 { text-align: center; }",
+    "h2 { text-align: left; }",
     "    .multicol {
 
       -webkit-column-count: 3; /* Chrome, Safari, Opera */
@@ -37,21 +37,21 @@ ui <- fluidPage(
         column-count: 3;
 
     }"
-    # "div.tooltip.fade.top.in {
-    # 
-    # max-width: 1400px;
-    # 
-    # }
-    # "
   ),
 
-  titlePanel(
-    "Trends in Industrial-Organizational Psychology and Related Journals"
-  ),
+# Creating Title Pane -----------------------------------------------------
+
+  titlePanel(div( h1("Trends in Industrial-Organizational Psychology and Related Journals"),
+                  h3(span("By"),
+                     a("James Rigby, M.A., University of Houston", href = "mailto:jrigby@uh.edu"),
+                     span("and"),
+                     em(a("Zach Traylor, M.S., Texas A & M", href = "mailto:zktraylor@gmail.com"))
+                  ))),
+
+# Defining Inputs ---------------------------------------------------------
   sidebarLayout(
     sidebarPanel(
-     # Defining Inputs ---------------------------------------------------------
-  
+      # Year Filter
       sliderInput(
         inputId = "yearrange",
         label = "Published after",
@@ -60,17 +60,22 @@ ui <- fluidPage(
         value = 1930,
         sep = ""
       ),
+      
+    # Hover Info
       bsTooltip("yearrange", 
                 "Use the slider to limit your search to a certain date range.",
                 placement = "top"),
+    # User defined queries input
       textInput(
         inputId = "oneword",
         label = "Search Terms/Phrases",
         value = "personality, general mental ability, training"
       ),
+    # Hover Info
       bsTooltip("oneword", 
                 "Individual terms and/or phrases may be used to search the database. For searches using more than one word and/or phrase, a comma must be placed between them (i.e., search phrase 1, search prase 2). Power users can employ regular expressions within their queries.",
                 placement = "top"),
+    # Minimum Match Count Input
       numericInput(
         inputId = "cutoff",
         label = "Minimum Match Count",
@@ -79,39 +84,51 @@ ui <- fluidPage(
         step = 1,
         value = 1
       ),
+    # Hover Info
       bsTooltip("cutoff", 
                 "By increasing the frequency with which queries must occur in each abstract in order to be included in the results, one can mitigate the number of false positives (Type I errors).",
                 placement = "top"),
+    # Plot by Proportion? input
       radioButtons(
         inputId = "prop",
         label = "Plot Proportion of Articles Published",
         selected = FALSE,
         choices = c("Yes" = TRUE, "No" = FALSE)
       ),
+    # Hover Info
       bsTooltip("prop", 
                 "Select \\\"Yes\\\" to plot the proportion of aricles on the Y axis instead of raw frequency. Note that proportions are based on SCOPUS database coverage. Weak coverage will result in inaccurate proportions, and earlier dates have noticeably weaker coverage.",
                 placement = "top"),
+    
+    # Plot by Journal? input
       radioButtons(
         inputId = "journ",
         label = "Plot by Journal",
         selected = FALSE,
         choices = c("Yes" = TRUE, "No" = FALSE)
       ),
+    
+    # Hover Info
       bsTooltip("journ", 
                 "Select \\\"Yes\\\" to search results for each journal separately.",
                 placement = "top"),
+    
+    # Download Button
       downloadButton('my_trends', 'Download'),
+    
+    # Hover Infor
       bsTooltip("my_trends", 
                 "Make sure to include \".csv\" in the filename so that the file is associated with your spreadsheet viewer.",
                 placement = "top")
     ),
+    
+
+# Defining application body -----------------------------------------------
     mainPanel(
       tabsetPanel(
         type = "tabs",
 
-
-        
-        # overview tab
+        # Creating Overview Panel -------------------------------------------------
         tabPanel(
           "Overview",
           br(),
@@ -132,30 +149,20 @@ ui <- fluidPage(
              that need to be resolved.  If you encounter any errors or have suggestions, please
              feel free to contact the author below."
           ),
-          br(),
-          hr(),
-          h4(
-            span("Created by "),
-            em(
-              a("James Rigby, M.A., University of Houston",
-                href = "mailto:jrigby@uh.edu"),
-              span("and"),
-              em(a("Zach Traylor, M.S., Texas A & M",
-                   href = "mailto:zktraylor@gmail.com"))
-            ),
-            br(),
-            span("Last updated: June 2019")
-          )
         ),
-        
-        # plot tab
+
+
+
+      # Defining Plot Panel -----------------------------------------------------
         tabPanel(
           "Plot",
           br(),
           plotlyOutput("plot1")
         ),
         
-        # citation rates tab
+
+      # Defining Citation Rate Panel --------------------------------------------
+      
         tabPanel(
           "Citation Rates",
           br(),
@@ -178,7 +185,8 @@ ui <- fluidPage(
           )
         ),
         
-        # Advanced Options tab
+
+        # Journal Filter Tabs -----------------------------------------------------
         tabPanel(
           "Journal Selection",
           h3("Journals to Include in Analysis:"),
@@ -296,13 +304,14 @@ ui <- fluidPage(
           )
         ),
         
-        # dataset  tab
+
+        # Tabular representation of search results --------------------------------
         tabPanel("Dataset",
                  br(),
                  dataTableOutput("table")),
         
-        
-        # Data base Coverage tab
+
+        # Providing data base information -----------------------------------------
         tabPanel(
           "Database Coverage",
           h3(
@@ -313,7 +322,8 @@ ui <- fluidPage(
           dataTableOutput(outputId = "coverage")
         ),
         
-        # instructions tab
+
+        # Instructions tab --------------------------------------------------------
         tabPanel(
           "Instructions",
           br(),
@@ -357,10 +367,15 @@ ui <- fluidPage(
 )
 
 server <- function(input, output) {
+  
+
+# Parsing the user query --------------------------------------------------
   inp.unigram <- reactive({
     as.vector(str_split(input$oneword, pattern = ", ", simplify = TRUE))
   })
   
+
+# Querying data base with search term -------------------------------------------------
   datasetInput <-
     reactive({
       table_prep(
@@ -371,6 +386,8 @@ server <- function(input, output) {
       )
     })
   
+
+# Preping the results for download ----------------------------------------
   downloadinput <-
     reactive({
       download_prep(
@@ -381,6 +398,8 @@ server <- function(input, output) {
       )
     })
   
+
+# Runing Citation Rate Models ---------------------------------------------
   citedinput <-
     reactive({
       cite_pred(
@@ -391,7 +410,9 @@ server <- function(input, output) {
         threshhold = input$cutoff
       )
     })
-  
+ 
+
+# Plotting publication trends ---------------------------------------------
   output$plot1 <-
     renderPlotly({
       tidy_trend_plot(
@@ -406,6 +427,8 @@ server <- function(input, output) {
       )
     })
   
+
+# Ploting citation Rates --------------------------------------------------
   output$plot2 <-
     renderPlotly({
       cite_plot(
@@ -417,6 +440,8 @@ server <- function(input, output) {
         )
     })
   
+
+# Outputing Tabular data --------------------------------------------------
   output$table <-
     renderDataTable(datasetInput(), options = list(pageLength = 50))
   
@@ -426,6 +451,8 @@ server <- function(input, output) {
   
   output$citetest <- renderDataTable(citedinput())
   
+
+# Outputting downloadable csv ---------------------------------------------
   output$my_trends <-
     downloadHandler(
       filename = function() {
