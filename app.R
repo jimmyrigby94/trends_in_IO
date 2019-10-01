@@ -1,5 +1,6 @@
 # Helper ----------------------------------------------------------------------
 library(shiny)
+library(shinyBS)
 library(tidyverse)
 library(tidytext)
 library(plotly)
@@ -20,6 +21,8 @@ source("cite_plot.R")
 ui <- fluidPage(
   
 
+# Defining CSS ------------------------------------------------------------
+
   tags$style(
     type = "text/css",
     ".shiny-output-error { visibility: hidden; }",
@@ -34,26 +37,40 @@ ui <- fluidPage(
         column-count: 3;
 
     }"
+    # "div.tooltip.fade.top.in {
+    # 
+    # max-width: 1400px;
+    # 
+    # }
+    # "
   ),
-  
+
   titlePanel(
     "Trends in Industrial-Organizational Psychology and Related Journals"
   ),
   sidebarLayout(
     sidebarPanel(
+     # Defining Inputs ---------------------------------------------------------
+  
       sliderInput(
         inputId = "yearrange",
-        label = "Publication Range",
+        label = "Published after",
         min = 1930,
         max = 2019,
         value = 1930,
         sep = ""
       ),
+      bsTooltip("yearrange", 
+                "Use the slider to limit your search to a certain date range.",
+                placement = "top"),
       textInput(
         inputId = "oneword",
-        label = "Search Terms/Phrases (Use comma \", \" to separate)",
+        label = "Search Terms/Phrases",
         value = "personality, general mental ability, training"
       ),
+      bsTooltip("oneword", 
+                "Individual terms and/or phrases may be used to search the database. For searches using more than one word and/or phrase, a comma must be placed between them (i.e., search phrase 1, search prase 2). Power users can employ regular expressions within their queries.",
+                placement = "top"),
       numericInput(
         inputId = "cutoff",
         label = "Minimum Match Count",
@@ -62,26 +79,37 @@ ui <- fluidPage(
         step = 1,
         value = 1
       ),
+      bsTooltip("cutoff", 
+                "By increasing the frequency with which queries must occur in each abstract in order to be included in the results, one can mitigate the number of false positives (Type I errors).",
+                placement = "top"),
       radioButtons(
         inputId = "prop",
         label = "Plot Proportion of Articles Published",
         selected = FALSE,
         choices = c("Yes" = TRUE, "No" = FALSE)
       ),
+      bsTooltip("prop", 
+                "Select \\\"Yes\\\" to plot the proportion of aricles on the Y axis instead of raw frequency. Note that proportions are based on SCOPUS database coverage. Weak coverage will result in inaccurate proportions, and earlier dates have noticeably weaker coverage.",
+                placement = "top"),
       radioButtons(
         inputId = "journ",
         label = "Plot by Journal",
         selected = FALSE,
         choices = c("Yes" = TRUE, "No" = FALSE)
       ),
+      bsTooltip("journ", 
+                "Select \\\"Yes\\\" to search results for each journal separately.",
+                placement = "top"),
       downloadButton('my_trends', 'Download'),
-      h5(
-        "Note. Must leave \".csv\" in the filename in order to successfully download the data."
-      )
+      bsTooltip("my_trends", 
+                "Make sure to include \".csv\" in the filename so that the file is associated with your spreadsheet viewer.",
+                placement = "top")
     ),
     mainPanel(
       tabsetPanel(
         type = "tabs",
+
+
         
         # overview tab
         tabPanel(
@@ -120,6 +148,171 @@ ui <- fluidPage(
           )
         ),
         
+        # plot tab
+        tabPanel(
+          "Plot",
+          br(),
+          plotlyOutput("plot1")
+        ),
+        
+        # citation rates tab
+        tabPanel(
+          "Citation Rates",
+          br(),
+          plotlyOutput("plot2"),
+          br(),
+          dataTableOutput("citetest"),
+          h4(
+            "The relationship between user-specified words/phrases and citation rates is estimated
+               using Poisson regression.  Separate regressions are estimated for each decade.
+               Although this is not a perfect method (e.g., cut points are arbitrary by nature),
+               doing so permits the estimation of nonlinear changes in slopes over time (which
+               frequently occurs when moratoriums are called [e.g., Mischel (1968) and the
+               subsequent lack of personality/individual differences research])."
+          ),
+          br(),
+          h4(
+            "Estimates are reported under the \"Estimate Without\" and \"Estimate With\" columns,
+               and raw coefficients are reported underneath the \"Effect\" column.  Articles that meet
+               or exceed the user's specified Minimum Match Count threshold are retained for the analyses."
+          )
+        ),
+        
+        # Advanced Options tab
+        tabPanel(
+          "Journal Selection",
+          h3("Journals to Include in Analysis:"),
+          tags$div(class = "multicol",
+                   checkboxGroupInput(
+                     "journal",
+                     label = NULL,
+                     c(
+                       "Academy of Management Executive" = "Academy of Management Executive",
+                       "Academy of Management Journal" = "Academy of Management Journal",
+                       "Academy of Management Perspectives" = "Academy of Management Perspectives",
+                       "Academy of Management Review" = "Academy of Management Review",
+                       "Administrative Science Quarterly" = "Administrative Science Quarterly",
+                       "American Psychologist" = "American Psychologist",
+                       "Annual Review of Psychology" = "Annual Review of Psychology",
+                       "Applied Psychological Measurement" = "Applied Psychological Measurement",
+                       "Applied Psychology" = "Applied Psychology",
+                       "Assessment" = "Assessment",
+                       "Basic and Applied Social Psychology" = "Basic and Applied Social Psychology",
+                       "Behavior Research Methods & Instrumentation" = "Behavior Research Methods & Instrumentation",
+                       "Behavior Research Methods" = "Behavior Research Methods",
+                       "Behavior Research Methods, Instruments, & Computers" = "Behavior Research Methods, Instruments, & Computers",
+                       "Computers in Human Behavior" = "Computers in Human Behavior",
+                       "Current Directions in Psychological Science" = "Current Directions in Psychological Science",
+                       "Educational and Psychological Measurement" = "Educational and Psychological Measurement",
+                       "European Journal of Psychological Assessment" = "European Journal of Psychological Assessment",
+                       "European Journal of Work and Organizational Psychology" = "European Journal of Work and Organizational Psychology",
+                       "Foundations and Trends in Human-Computer Interaction" = "Foundations and Trends in Human-Computer Interaction",
+                       "Group & Organization Management" = "Group & Organization Management",
+                       "Group Dynamics" = "Group Dynamics",
+                       "Handbook of Employee Selection" = "Handbook of Employee Selection",
+                       "Handbook of Employee Selection, Second Edition" = "Handbook of Employee Selection, Second Edition",
+                       "Harvard Business Review" = "Harvard Business Review",
+                       "Historical Perspectives in Industrial and Organizational Psychology" = "Historical Perspectives in Industrial and Organizational Psychology",
+                       "Human Factors" = "Human Factors",
+                       "Human Performance" = "Human Performance",
+                       "Human Relations" = "Human Relations",
+                       "Human Resource Management Journal" = "Human Resource Management Journal",
+                       "Human Resource Management Review" = "Human Resource Management Review",
+                       "Human Resource Management" = "Human Resource Management",
+                       "Human-Computer Interaction" = "Human-Computer Interaction",
+                       "Industrial and Organizational Psychology" = "Industrial and Organizational Psychology",
+                       "International Journal of Human Resource Management" = "International Journal of Human Resource Management",
+                       "International Journal of Human-Computer Interaction" = "International Journal of Human-Computer Interaction",
+                       "International Journal of Human-Computer Studies" = "International Journal of Human-Computer Studies",
+                       "International Journal of Selection and Assessment" = "International Journal of Selection and Assessment",
+                       "International Journal of Stress Management" = "International Journal of Stress Management",
+                       "International Journal of Training and Development" = "International Journal of Training and Development",
+                       "International Review of Industrial and Organizational Psychology" = "International Review of Industrial and Organizational Psychology",
+                       "Journal of Applied Psychology" = "Journal of Applied Psychology",
+                       "Journal of Applied Social Psychology" = "Journal of Applied Social Psychology",
+                       "Journal of Behavioral Decision Making" = "Journal of Behavioral Decision Making",
+                       "Journal of Business and Psychology" = "Journal of Business and Psychology",
+                       "Journal of Educational Measurement" = "Journal of Educational Measurement",
+                       "Journal of Experimental Psychology: General" = "Journal of Experimental Psychology: General",
+                       "Journal of Individual Differences" = "Journal of Individual Differences",
+                       "Journal of Leadership and Organizational Studies" = "Journal of Leadership and Organizational Studies",
+                       "Journal of Management Studies" = "Journal of Management Studies",
+                       "Journal of Management" = "Journal of Management",
+                       "Journal of Managerial Psychology" = "Journal of Managerial Psychology",
+                       "Journal of Occupational and Organizational Psychology" = "Journal of Occupational and Organizational Psychology",
+                       "Journal of Occupational Health Psychology" = "Journal of Occupational Health Psychology",
+                       "Journal of Organizational Behavior Management" = "Journal of Organizational Behavior Management",
+                       "Journal of Organizational Behavior" = "Journal of Organizational Behavior",
+                       "Journal of Personality and Social Psychology" = "Journal of Personality and Social Psychology",
+                       "Journal of Personality" = "Journal of Personality",
+                       "Journal of Research in Personality" = "Journal of Research in Personality",
+                       "Journal of Vocational Behavior" = "Journal of Vocational Behavior",
+                       "Judgment and Decision Making" = "Judgment and Decision Making",
+                       "Leadership Quarterly" = "Leadership Quarterly",
+                       "Military Psychology" = "Military Psychology",
+                       "Organization Science" = "Organization Science",
+                       "Organizational Behavior and Human Decision Processes" = "Organizational Behavior and Human Decision Processes",
+                       "Organizational Dynamics" = "Organizational Dynamics",
+                       "Organizational Psychology Review" = "Organizational Psychology Review",
+                       "Organizational Research Methods" = "Organizational Research Methods",
+                       "Personality and Individual Differences" = "Personality and Individual Differences",
+                       "Personnel Psychology" = "Personnel Psychology",
+                       "Personnel Review" = "Personnel Review",
+                       "Perspectives on Psychological Science" = "Perspectives on Psychological Science",
+                       "Psychological Bulletin" = "Psychological Bulletin",
+                       "Psychological Methods" = "Psychological Methods",
+                       "Psychological Review" = "Psychological Review",
+                       "Psychological Science" = "Psychological Science",
+                       "Psychometrika" = "Psychometrika",
+                       "Public Personnel Management" = "Public Personnel Management",
+                       "Research in Organizational Behavior" = "Research in Organizational Behavior",
+                       "Research in Personnel and Human Resources Management" = "Research in Personnel and Human Resources Management",
+                       "Small Group Research" = "Small Group Research",
+                       "Strategic Management Journal" = "Strategic Management Journal",
+                       "The International Journal of Human Resource Management" = "The International Journal of Human Resource Management",
+                       "The Personnel Administrator" = "The Personnel Administrator",
+                       "Work and Stress" = "Work and Stress"
+                     ), 
+                     selected = c("Journal of Applied Psychology",
+                                  "Personnel Psychology",
+                                  "Academy of Management Journal",
+                                  "Journal of Management",
+                                  "Journal of Occupational and Organizational Psychology",
+                                  "International Journal of Selection and Assessment",
+                                  "Organizational Behavior and Human Decision Processes",
+                                  "Journal of Vocational Behavior",
+                                  "Academy of Management Review",
+                                  "Psychological Bulletin",
+                                  "Human Performance",
+                                  "American Psychologist",
+                                  "Journal of Business and Psychology",
+                                  "Leadership Quarterly",
+                                  "Journal of Applied Social Psychology",
+                                  "Journal of Occupational Health Psychology",
+                                  "Applied Psychology"
+                     )
+                   )
+                   
+          )
+        ),
+        
+        # dataset  tab
+        tabPanel("Dataset",
+                 br(),
+                 dataTableOutput("table")),
+        
+        
+        # Data base Coverage tab
+        tabPanel(
+          "Database Coverage",
+          h3(
+            "The table below contains information about the number of articles stored in the application
+                    database for each year. Users can employ this table as a diagnostic tool to verify the reliability
+                    of the data presented."
+          ),
+          dataTableOutput(outputId = "coverage")
+        ),
+        
         # instructions tab
         tabPanel(
           "Instructions",
@@ -156,176 +349,6 @@ ui <- fluidPage(
             "Articles that meet the search criteria are searchable, sortable, and
              downloadable.  Please note that filenames *must* include a file extension
              to successfully download the datafile (e.g., my_data.csv, *not* my_data)."
-          )
-        ),
-        
-        # plot tab
-        tabPanel(
-          "Plot",
-          br(),
-          plotlyOutput("plot1"),
-          conditionalPanel(
-            "input.prop =='TRUE'",
-            h3(
-              "Proportions are based on SCOPUS database coverage.  Weak coverage will
-                              result in inaccurate proportions, and earlier dates have noticeably weaker
-                              coverage."
-            )
-          )
-        ),
-        
-        # dataset  tab
-        tabPanel("Dataset",
-                 br(),
-                 dataTableOutput("table")),
-        
-        # citation rates tab
-        tabPanel(
-          "Citation Rates",
-          br(),
-          plotlyOutput("plot2"),
-          br(),
-          dataTableOutput("citetest"),
-          h4(
-            "The relationship between user-specified words/phrases and citation rates is estimated
-               using Poisson regression.  Separate regressions are estimated for each decade.
-               Although this is not a perfect method (e.g., cut points are arbitrary by nature),
-               doing so permits the estimation of nonlinear changes in slopes over time (which
-               frequently occurs when moratoriums are called [e.g., Mischel (1968) and the
-               subsequent lack of personality/individual differences research])."
-          ),
-          br(),
-          h4(
-            "Estimates are reported under the \"Estimate Without\" and \"Estimate With\" columns,
-               and raw coefficients are reported underneath the \"Effect\" column.  Articles that meet
-               or exceed the user's specified Minimum Match Count threshold are retained for the analyses."
-          )
-        ),
-        # Data base Coverage tab
-        tabPanel(
-          "Database Coverage",
-          h3(
-            "The table below contains information about the number of articles stored in the application
-                    database for each year. Users can employ this table as a diagnostic tool to verify the reliability
-                    of the data presented."
-          ),
-          dataTableOutput(outputId = "coverage")
-        ),
-        # Advanced Options tab
-        tabPanel(
-          "Journal Selection",
-          h3("Journals to Include in Analysis:"),
-          tags$div(class = "multicol",
-          checkboxGroupInput(
-            "journal",
-            label = NULL,
-            c(
-              "Academy of Management Executive" = "Academy of Management Executive",
-              "Academy of Management Journal" = "Academy of Management Journal",
-              "Academy of Management Perspectives" = "Academy of Management Perspectives",
-              "Academy of Management Review" = "Academy of Management Review",
-              "Administrative Science Quarterly" = "Administrative Science Quarterly",
-              "American Psychologist" = "American Psychologist",
-              "Annual Review of Psychology" = "Annual Review of Psychology",
-              "Applied Psychological Measurement" = "Applied Psychological Measurement",
-              "Applied Psychology" = "Applied Psychology",
-              "Assessment" = "Assessment",
-              "Basic and Applied Social Psychology" = "Basic and Applied Social Psychology",
-              "Behavior Research Methods & Instrumentation" = "Behavior Research Methods & Instrumentation",
-              "Behavior Research Methods" = "Behavior Research Methods",
-              "Behavior Research Methods, Instruments, & Computers" = "Behavior Research Methods, Instruments, & Computers",
-              "Computers in Human Behavior" = "Computers in Human Behavior",
-              "Current Directions in Psychological Science" = "Current Directions in Psychological Science",
-              "Educational and Psychological Measurement" = "Educational and Psychological Measurement",
-              "European Journal of Psychological Assessment" = "European Journal of Psychological Assessment",
-              "European Journal of Work and Organizational Psychology" = "European Journal of Work and Organizational Psychology",
-              "Foundations and Trends in Human-Computer Interaction" = "Foundations and Trends in Human-Computer Interaction",
-              "Group & Organization Management" = "Group & Organization Management",
-              "Group Dynamics" = "Group Dynamics",
-              "Handbook of Employee Selection" = "Handbook of Employee Selection",
-              "Handbook of Employee Selection, Second Edition" = "Handbook of Employee Selection, Second Edition",
-              "Harvard Business Review" = "Harvard Business Review",
-              "Historical Perspectives in Industrial and Organizational Psychology" = "Historical Perspectives in Industrial and Organizational Psychology",
-              "Human Factors" = "Human Factors",
-              "Human Performance" = "Human Performance",
-              "Human Relations" = "Human Relations",
-              "Human Resource Management Journal" = "Human Resource Management Journal",
-              "Human Resource Management Review" = "Human Resource Management Review",
-              "Human Resource Management" = "Human Resource Management",
-              "Human-Computer Interaction" = "Human-Computer Interaction",
-              "Industrial and Organizational Psychology" = "Industrial and Organizational Psychology",
-              "International Journal of Human Resource Management" = "International Journal of Human Resource Management",
-              "International Journal of Human-Computer Interaction" = "International Journal of Human-Computer Interaction",
-              "International Journal of Human-Computer Studies" = "International Journal of Human-Computer Studies",
-              "International Journal of Selection and Assessment" = "International Journal of Selection and Assessment",
-              "International Journal of Stress Management" = "International Journal of Stress Management",
-              "International Journal of Training and Development" = "International Journal of Training and Development",
-              "International Review of Industrial and Organizational Psychology" = "International Review of Industrial and Organizational Psychology",
-              "Journal of Applied Psychology" = "Journal of Applied Psychology",
-              "Journal of Applied Social Psychology" = "Journal of Applied Social Psychology",
-              "Journal of Behavioral Decision Making" = "Journal of Behavioral Decision Making",
-              "Journal of Business and Psychology" = "Journal of Business and Psychology",
-              "Journal of Educational Measurement" = "Journal of Educational Measurement",
-              "Journal of Experimental Psychology: General" = "Journal of Experimental Psychology: General",
-              "Journal of Individual Differences" = "Journal of Individual Differences",
-              "Journal of Leadership and Organizational Studies" = "Journal of Leadership and Organizational Studies",
-              "Journal of Management Studies" = "Journal of Management Studies",
-              "Journal of Management" = "Journal of Management",
-              "Journal of Managerial Psychology" = "Journal of Managerial Psychology",
-              "Journal of Occupational and Organizational Psychology" = "Journal of Occupational and Organizational Psychology",
-              "Journal of Occupational Health Psychology" = "Journal of Occupational Health Psychology",
-              "Journal of Organizational Behavior Management" = "Journal of Organizational Behavior Management",
-              "Journal of Organizational Behavior" = "Journal of Organizational Behavior",
-              "Journal of Personality and Social Psychology" = "Journal of Personality and Social Psychology",
-              "Journal of Personality" = "Journal of Personality",
-              "Journal of Research in Personality" = "Journal of Research in Personality",
-              "Journal of Vocational Behavior" = "Journal of Vocational Behavior",
-              "Judgment and Decision Making" = "Judgment and Decision Making",
-              "Leadership Quarterly" = "Leadership Quarterly",
-              "Military Psychology" = "Military Psychology",
-              "Organization Science" = "Organization Science",
-              "Organizational Behavior and Human Decision Processes" = "Organizational Behavior and Human Decision Processes",
-              "Organizational Dynamics" = "Organizational Dynamics",
-              "Organizational Psychology Review" = "Organizational Psychology Review",
-              "Organizational Research Methods" = "Organizational Research Methods",
-              "Personality and Individual Differences" = "Personality and Individual Differences",
-              "Personnel Psychology" = "Personnel Psychology",
-              "Personnel Review" = "Personnel Review",
-              "Perspectives on Psychological Science" = "Perspectives on Psychological Science",
-              "Psychological Bulletin" = "Psychological Bulletin",
-              "Psychological Methods" = "Psychological Methods",
-              "Psychological Review" = "Psychological Review",
-              "Psychological Science" = "Psychological Science",
-              "Psychometrika" = "Psychometrika",
-              "Public Personnel Management" = "Public Personnel Management",
-              "Research in Organizational Behavior" = "Research in Organizational Behavior",
-              "Research in Personnel and Human Resources Management" = "Research in Personnel and Human Resources Management",
-              "Small Group Research" = "Small Group Research",
-              "Strategic Management Journal" = "Strategic Management Journal",
-              "The International Journal of Human Resource Management" = "The International Journal of Human Resource Management",
-              "The Personnel Administrator" = "The Personnel Administrator",
-              "Work and Stress" = "Work and Stress"
-            ), 
-            selected = c("Journal of Applied Psychology",
-                         "Personnel Psychology",
-                         "Academy of Management Journal",
-                         "Journal of Management",
-                         "Journal of Occupational and Organizational Psychology",
-                         "International Journal of Selection and Assessment",
-                         "Organizational Behavior and Human Decision Processes",
-                         "Journal of Vocational Behavior",
-                         "Academy of Management Review",
-                         "Psychological Bulletin",
-                         "Human Performance",
-                         "American Psychologist",
-                         "Journal of Business and Psychology",
-                         "Leadership Quarterly",
-                         "Journal of Applied Social Psychology",
-                         "Journal of Occupational Health Psychology",
-                         "Applied Psychology"
-                         )
-            )
-
           )
         )
       )
