@@ -6,6 +6,7 @@ library(tidytext)
 library(plotly)
 library(knitr)
 library(vroom)
+library(tippy)
 
 
 # Defining journal names for named vector to reduced repeat code ---------------------------------
@@ -117,6 +118,12 @@ ui <- fluidPage(
 
         column-count: 3;
 
+    }",
+    ".form-group {
+    margin-bottom: 1px;
+}",
+    ".largerfont {
+    font-size: 130%;
     }"
   ),
   
@@ -143,9 +150,8 @@ ui <- fluidPage(
       ),
       
       # Hover Info
-      bsTooltip("yearrange", 
-                "Use the slider to limit your search to a certain date range.",
-                placement = "right"),
+      tippy::tippy("&#9432;", "<div class = \"largerfont\"> Use the slider to limit your search to a certain date range. </div>"),
+      
       # User defined queries input
       textInput(
         inputId = "oneword",
@@ -153,9 +159,7 @@ ui <- fluidPage(
         value = "personality, general mental ability, training"
       ),
       # Hover Info
-      bsTooltip("oneword", 
-                "Individual terms and/or phrases may be used to search the database. For searches using more than one word and/or phrase, a comma must be placed between them (i.e., search phrase 1, search prase 2). Power users can employ regular expressions within their queries.",
-                placement = "right"),
+      tippy::tippy("&#9432;", "<div class = \"largerfont\">Individual terms and/or phrases may be used to search the database. For searches using more than one word and/or phrase, a comma must be placed between them (i.e., search phrase 1, search prase 2). Power users can employ regular expressions within their queries.</div>"),
       # Minimum Match Count Input
       numericInput(
         inputId = "cutoff",
@@ -166,9 +170,8 @@ ui <- fluidPage(
         value = 1
       ),
       # Hover Info
-      bsTooltip("cutoff", 
-                "By increasing the frequency with which queries must occur in each abstract in order to be included in the results, one can mitigate the number of false positives (Type I errors).",
-                placement = "right"),
+      tippy::tippy("&#9432;", 
+                "<div class = \"largerfont\">By increasing the frequency with which queries must occur in each abstract in order to be included in the results, one can mitigate the number of false positives (Type I errors).</div>"),
       # Plot by Proportion? input
       radioButtons(
         inputId = "prop",
@@ -177,9 +180,8 @@ ui <- fluidPage(
         choices = c("Yes" = TRUE, "No" = FALSE)
       ),
       # Hover Info
-      bsTooltip("prop", 
-                "Select \\\"Yes\\\" to plot the proportion of aricles on the Y axis instead of raw frequency. Note that proportions are based on SCOPUS database coverage. Weak coverage will result in inaccurate proportions, and earlier dates have noticeably weaker coverage.",
-                placement = "right"),
+      tippy::tippy("&#9432;",  
+                "<div class = \"largerfont\">Select \"Yes\" to plot the proportion of aricles on the Y axis instead of raw frequency. Note that proportions are based on SCOPUS database coverage. Weak coverage will result in inaccurate proportions, and earlier dates have noticeably weaker coverage.</div>"),
       
       # Plot by Journal? input
       radioButtons(
@@ -190,17 +192,15 @@ ui <- fluidPage(
       ),
       
       # Hover Info
-      bsTooltip("journ", 
-                "Select \\\"Yes\\\" to search results for each journal separately.",
-                placement = "right"),
+      tippy::tippy("&#9432;<br/>",  
+                "<div class = \"largerfont\">Select \"Yes\" to search results for each journal separately.</div>"),
       
       # Download Button
       downloadButton('my_trends', 'Download'),
       
-      # Hover Infor
-      bsTooltip("my_trends", 
-                "Make sure to include \".csv\" in the filename so that the file is associated with your spreadsheet viewer.",
-                placement = "right")
+      # Hover Info
+      tippy::tippy("<br/>&#9432;",  
+                "<div class = \"largerfont\">Make sure to include \".csv\" in the filename so that the file is associated with your spreadsheet viewer.</div>")
     ),
     
     
