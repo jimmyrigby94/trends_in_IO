@@ -19,6 +19,9 @@ if(!require(knitr)){
 if(!require(vroom)){
   install.packages(vroom)
 }
+if(!require(tippy)){
+  install.packages(tippy)
+}
 
 
 library(shiny)
@@ -28,3 +31,4 @@ library(tidytext)
 library(plotly)
 library(knitr)
 library(vroom)
+library(tippy)
