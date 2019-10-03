@@ -7,16 +7,6 @@ library(plotly)
 library(knitr)
 library(vroom)
 
-master <- rbind(vroom("MasterFinal_060219_1.csv", col_names = T),
-                vroom("MasterFinal_060219_2.csv", col_names = T),
-                vroom("MasterFinal_060219_3.csv", col_names = T))
-
-source("tidy_trend_plot.R")
-source("cite_pred.R")
-source("download_prep.R")
-source("table_prep.R")
-source("cite_plot.R")
-
 
 # Defining journal names for named vector to reduced repeat code ---------------------------------
 
@@ -111,9 +101,9 @@ j_names<-c(
 # App -------------------------------------------------------------------------
 ui <- fluidPage(
   
-
-# Defining CSS ------------------------------------------------------------
-
+  
+  # Defining CSS ------------------------------------------------------------
+  
   tags$style(
     type = "text/css",
     ".shiny-output-error { visibility: hidden; }",
@@ -129,17 +119,17 @@ ui <- fluidPage(
 
     }"
   ),
-
-# Creating Title Pane -----------------------------------------------------
-
+  
+  # Creating Title Pane -----------------------------------------------------
+  
   titlePanel(div( h1("Trends in Industrial-Organizational Psychology and Related Journals"),
                   h3(span("By"),
                      em(a("James Rigby, M.A., University of Houston", href = "mailto:jrigby@uh.edu")),
                      span("and"),
                      em(a("Zach Traylor, M.S., Texas A & M", href = "mailto:zktraylor@gmail.com"))
                   ))),
-
-# Defining Inputs ---------------------------------------------------------
+  
+  # Defining Inputs ---------------------------------------------------------
   sidebarLayout(
     sidebarPanel(
       # Year Filter
@@ -152,21 +142,21 @@ ui <- fluidPage(
         sep = ""
       ),
       
-    # Hover Info
+      # Hover Info
       bsTooltip("yearrange", 
                 "Use the slider to limit your search to a certain date range.",
-                placement = "top"),
-    # User defined queries input
+                placement = "right"),
+      # User defined queries input
       textInput(
         inputId = "oneword",
         label = "Search Terms/Phrases",
         value = "personality, general mental ability, training"
       ),
-    # Hover Info
+      # Hover Info
       bsTooltip("oneword", 
                 "Individual terms and/or phrases may be used to search the database. For searches using more than one word and/or phrase, a comma must be placed between them (i.e., search phrase 1, search prase 2). Power users can employ regular expressions within their queries.",
-                placement = "top"),
-    # Minimum Match Count Input
+                placement = "right"),
+      # Minimum Match Count Input
       numericInput(
         inputId = "cutoff",
         label = "Minimum Match Count",
@@ -175,50 +165,50 @@ ui <- fluidPage(
         step = 1,
         value = 1
       ),
-    # Hover Info
+      # Hover Info
       bsTooltip("cutoff", 
                 "By increasing the frequency with which queries must occur in each abstract in order to be included in the results, one can mitigate the number of false positives (Type I errors).",
-                placement = "top"),
-    # Plot by Proportion? input
+                placement = "right"),
+      # Plot by Proportion? input
       radioButtons(
         inputId = "prop",
         label = "Plot Proportion of Articles Published",
         selected = FALSE,
         choices = c("Yes" = TRUE, "No" = FALSE)
       ),
-    # Hover Info
+      # Hover Info
       bsTooltip("prop", 
                 "Select \\\"Yes\\\" to plot the proportion of aricles on the Y axis instead of raw frequency. Note that proportions are based on SCOPUS database coverage. Weak coverage will result in inaccurate proportions, and earlier dates have noticeably weaker coverage.",
-                placement = "top"),
-    
-    # Plot by Journal? input
+                placement = "right"),
+      
+      # Plot by Journal? input
       radioButtons(
         inputId = "journ",
         label = "Plot by Journal",
         selected = FALSE,
         choices = c("Yes" = TRUE, "No" = FALSE)
       ),
-    
-    # Hover Info
+      
+      # Hover Info
       bsTooltip("journ", 
                 "Select \\\"Yes\\\" to search results for each journal separately.",
-                placement = "top"),
-    
-    # Download Button
+                placement = "right"),
+      
+      # Download Button
       downloadButton('my_trends', 'Download'),
-    
-    # Hover Infor
+      
+      # Hover Infor
       bsTooltip("my_trends", 
                 "Make sure to include \".csv\" in the filename so that the file is associated with your spreadsheet viewer.",
-                placement = "top")
+                placement = "right")
     ),
     
-
-# Defining application body -----------------------------------------------
+    
+    # Defining application body -----------------------------------------------
     mainPanel(
       tabsetPanel(
         type = "tabs",
-
+        
         # Creating Overview Panel -------------------------------------------------
         tabPanel(
           "Overview",
@@ -241,19 +231,19 @@ ui <- fluidPage(
              feel free to contact the author below."
           )
         ),
-
-
-
-      # Defining Plot Panel -----------------------------------------------------
+        
+        
+        
+        # Defining Plot Panel -----------------------------------------------------
         tabPanel(
           "Plot",
           br(),
           plotlyOutput("plot1")
         ),
         
-
-      # Defining Citation Rate Panel --------------------------------------------
-      
+        
+        # Defining Citation Rate Panel --------------------------------------------
+        
         tabPanel(
           "Citation Rates",
           br(),
@@ -276,7 +266,7 @@ ui <- fluidPage(
           )
         ),
         
-
+        
         # Journal Filter Tabs -----------------------------------------------------
         tabPanel(
           "Journal Selection",
@@ -310,16 +300,16 @@ ui <- fluidPage(
           actionButton("selectall", label="Select All"),
           actionButton("deselectall", label="Deselect All")
           
-
+          
         ),
         
-
+        
         # Tabular representation of search results --------------------------------
         tabPanel("Dataset",
                  br(),
                  dataTableOutput("table")),
         
-
+        
         # Providing data base information -----------------------------------------
         tabPanel(
           "Database Coverage",
@@ -331,7 +321,7 @@ ui <- fluidPage(
           dataTableOutput(outputId = "coverage")
         ),
         
-
+        
         # Instructions tab --------------------------------------------------------
         tabPanel(
           "Instructions",
@@ -374,133 +364,3 @@ ui <- fluidPage(
     )
   )
 )
-
-server <- function(input, output, session) {
-  
-
-# Parsing the user query --------------------------------------------------
-  inp.unigram <- reactive({
-    as.vector(str_split(input$oneword, pattern = ", ", simplify = TRUE))
-  })
-  
-
-# Querying data base with search term -------------------------------------------------
-  datasetInput <-
-    reactive({
-      table_prep(
-        data = master[master$`Source title` %in% input$journal,],
-        unigram = input$oneword,
-        threshhold = input$cutoff,
-        upper_year = input$yearrange[2],
-        lower_year = input$yearrange[1]
-      )
-    })
-  
-
-# Preping the results for download ----------------------------------------
-  downloadinput <-
-    reactive({
-      download_prep(
-        data = master[master$`Source title` %in% input$journal,],
-        unigram = input$oneword,
-        threshhold = input$cutoff,
-        upper_year = input$yearrange[2],
-        lower_year = input$yearrange[1]
-      )
-    })
-  
-
-# Runing Citation Rate Models ---------------------------------------------
-  citedinput <-
-    reactive({
-      cite_pred(
-        data = master[master$`Source title` %in% input$journal,],
-        date = Year,
-        group = `Source title`,
-        unigram = input$oneword,
-        threshhold = input$cutoff
-      )
-    })
- 
-
-# Plotting publication trends ---------------------------------------------
-  output$plot1 <-
-    renderPlotly({
-      tidy_trend_plot(
-        data = master[master$`Source title` %in% input$journal,],
-        date = Year,
-        group = `Source title`,
-        unigram = input$oneword,
-        threshhold = input$cutoff,
-        prop = input$prop,
-        byjourn = input$journ,
-        upper_year = input$yearrange[2],
-        lower_year = input$yearrange[1]
-      )
-    })
-  
-
-# Ploting citation Rates --------------------------------------------------
-  output$plot2 <-
-    renderPlotly({
-      cite_plot(
-        data = master[master$`Source title` %in% input$journal,],
-                date = Year,
-                group = `Source title`,
-                unigram = input$oneword,
-                threshhold = input$cutoff
-        )
-    })
-  
-
-# Outputing Tabular data --------------------------------------------------
-  output$table <-
-    renderDataTable(datasetInput(), options = list(pageLength = 50))
-  
-  output$coverage <-
-    renderDataTable(master[master$`Source title` %in% input$journal,] %>% count(Year, `Source title`) %>% arrange(Year),
-                    options = list(pageLength = 50))
-  
-  output$citetest <- renderDataTable(citedinput())
-  
-
-# Handler for select all and deselect all ---------------------------------
-  # One observe context for deselect
-  i<-0
-  observe({
-    if (input$deselectall > i) {
-        updateCheckboxGroupInput(session=session, 
-                                 inputId="journal",
-                                 choices = j_names,
-                                 selected = c(NULL))
-        
-        i<-i+1
-    }
-  })
-  
-  # One observe context for select
-  j<-0
-  observe({
-    if(input$selectall > j){
-      updateCheckboxGroupInput(session=session, 
-                               inputId="journal",
-                               choices = j_names,
-                               selected = names(j_names))
-      j<-j+1
-    }
-  })
-  
-  
-# Outputting downloadable csv ---------------------------------------------
-  output$my_trends <-
-    downloadHandler(
-      filename = function() {
-        paste("trends", Sys.Date(), ".csv", sep = "")
-      },
-      content = function(fname) {
-        write.csv(downloadinput(), fname, row.names = FALSE)
-      }
-    )
-}
-
-shinyApp(ui = ui, server = server)
