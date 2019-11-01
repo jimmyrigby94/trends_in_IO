@@ -1,110 +1,146 @@
-# Helper ----------------------------------------------------------------------
-library(shiny)
-library(shinyBS)
-library(tidyverse)
-library(tidytext)
-library(plotly)
-library(knitr)
-library(vroom)
-library(tippy)
+# header
+header <- dashboardHeader(title = "Trends in I-O Psychology", 
+                          titleWidth  = "350px", 
+                          
+                          # Places Search and Plot options as Dropdowns in Header
+                          dropdownMenu(headerText = "Refine Search",
+                                       icon = "Refine Search",
+                                       menuItem(
+                                       sliderInput(
+                                         inputId = "yearrange",
+                                         label = "Published After",
+                                         min = 1930,
+                                         max = 2019,
+                                         value = c(1930, 2019),
+                                         sep = ""
+                                       )),
+                                       menuItem(  tippy::tippy(
+                                         "&#9432;",
+                                         "<div class = \"largerfont\"> Use slider to limit search to a specific year range. </div>"
+                                       )),
+                                       menuItem(
+                                         numericInput(
+                                           inputId = "cutoff",
+                                           label = "Minimum Match Count",
+                                           min = 1,
+                                           max = 30,
+                                           step = 1,
+                                           value = 1
+                                         )),
+                                       # hover text
+                                       menuItem(tippy::tippy(
+                                         "&#9432;",
+                                         "<div class = \"largerfont\"> By increasing the frequency with which queries must occur in a given abstract 
+                                                for inclusion in one's search results, one can mitigate the number of false 
+                                                positives (Type I errors). </div>"
+                                       ))),
+                          dropdownMenu(headerText = "Plot Options",
+                                         icon =  "Plot Options",
+                                       menuItem(
+                                       # plot by proportion input
+                                       radioButtons(
+                                         inputId = "prop",
+                                         label = "Plot Proportion of Published Articles",
+                                         selected = FALSE,
+                                         choices = c("Yes" = TRUE, "No" = FALSE)
+                                       )),
+                                       # hover text
+                                       menuItem(
+                                       tippy::tippy(
+                                         "&#9432;",
+                                         "<div class = \"largerfont\"> Select \"Yes\" to plot the proportion of published articles on the Y axis (instead of raw frequencies).  
+                                  Note that proportions are based on SCOPUS database coverage.  Weak coverage will invariably result in 
+                                  inaccurate proportion estimates, and earlier dates have notably weaker coverage. </div>"
+                                       )),
+                                       
+                                       # plot by journal input
+                                      menuItem(radioButtons(
+                                         inputId = "journ",
+                                         label = "Plot by Journal",
+                                         selected = FALSE,
+                                         choices = c("Yes" = TRUE, "No" = FALSE)
+                                       )),
+                                       # hover text
+                                      menuItem(
+                                       tippy::tippy(
+                                         "&#9432;<br/>",
+                                         "<div class = \"largerfont\"> Select \"Yes\" to plot search results for each journal separately. </div>"
+                                       ))
+                          )
+                                        )
 
+# sidebar
+sidebar <- dashboardSidebar(
+  sidebarMenu(
+    h4("Search"),
+    
+    # user-defined query input
+    textInput(
+      inputId = "oneword",
+      label = NULL,
+      value = "personality, general mental ability, training"
+    ),
+    # hover text
+    tippy::tippy(
+      "&#9432;",
+      "<div class = \"largerfont\"> Individual terms and/or phrases may be used to search the database.  
+                                  For searches with more than one word and/or phrase, a comma *MUST* 
+                                  be placed between them (i.e., search phrase 1, search prase 2).  
+                                  Users may also use regular expressions within their queries. </div>"
+    ),
+    
+    h4("Navigation"),
+    menuItem(
+      "Dashboard",
+      tabName = "plts_and_analytics",
+      icon = icon("th"),
+      selected = TRUE
+    ),
+    menuItem(
+      "Journal Selection",
+      tabName = "journal_selection",
+      icon = icon("check-square"),
+      selected = FALSE
+    ),
+    menuItem(
+      "Tables",
+      tabName = "tables",
+      icon = icon("table"),
+      selected = FALSE,
+      menuSubItem(      "Search Results",
+                        tabName = "searchresults",
+                        icon = icon("table"),
+                        selected = FALSE),
+      menuItem(
+        "Database Coverage",
+        tabName = "database_coverage",
+        icon = icon("signal"),
+        selected = FALSE
+      )
+    ),
 
-# Defining journal names for named vector to reduced repeat code ---------------------------------
+    menuItem(
+      "About",
+      tabName = "about",
+      icon = icon("question"),
+      selected = FALSE
+    )
+  ),
 
-j_names<-c(
-  "Academy of Management Executive" = "Academy of Management Executive",
-  "Academy of Management Journal" = "Academy of Management Journal",
-  "Academy of Management Perspectives" = "Academy of Management Perspectives",
-  "Academy of Management Review" = "Academy of Management Review",
-  "Administrative Science Quarterly" = "Administrative Science Quarterly",
-  "American Psychologist" = "American Psychologist",
-  "Annual Review of Psychology" = "Annual Review of Psychology",
-  "Applied Psychological Measurement" = "Applied Psychological Measurement",
-  "Applied Psychology" = "Applied Psychology",
-  "Assessment" = "Assessment",
-  "Basic and Applied Social Psychology" = "Basic and Applied Social Psychology",
-  "Behavior Research Methods & Instrumentation" = "Behavior Research Methods & Instrumentation",
-  "Behavior Research Methods" = "Behavior Research Methods",
-  "Behavior Research Methods, Instruments, & Computers" = "Behavior Research Methods, Instruments, & Computers",
-  "Computers in Human Behavior" = "Computers in Human Behavior",
-  "Current Directions in Psychological Science" = "Current Directions in Psychological Science",
-  "Educational and Psychological Measurement" = "Educational and Psychological Measurement",
-  "European Journal of Psychological Assessment" = "European Journal of Psychological Assessment",
-  "European Journal of Work and Organizational Psychology" = "European Journal of Work and Organizational Psychology",
-  "Foundations and Trends in Human-Computer Interaction" = "Foundations and Trends in Human-Computer Interaction",
-  "Group & Organization Management" = "Group & Organization Management",
-  "Group Dynamics" = "Group Dynamics",
-  "Handbook of Employee Selection" = "Handbook of Employee Selection",
-  "Handbook of Employee Selection, Second Edition" = "Handbook of Employee Selection, Second Edition",
-  "Harvard Business Review" = "Harvard Business Review",
-  "Historical Perspectives in Industrial and Organizational Psychology" = "Historical Perspectives in Industrial and Organizational Psychology",
-  "Human Factors" = "Human Factors",
-  "Human Performance" = "Human Performance",
-  "Human Relations" = "Human Relations",
-  "Human Resource Management Journal" = "Human Resource Management Journal",
-  "Human Resource Management Review" = "Human Resource Management Review",
-  "Human Resource Management" = "Human Resource Management",
-  "Human-Computer Interaction" = "Human-Computer Interaction",
-  "Industrial and Organizational Psychology" = "Industrial and Organizational Psychology",
-  "International Journal of Human Resource Management" = "International Journal of Human Resource Management",
-  "International Journal of Human-Computer Interaction" = "International Journal of Human-Computer Interaction",
-  "International Journal of Human-Computer Studies" = "International Journal of Human-Computer Studies",
-  "International Journal of Selection and Assessment" = "International Journal of Selection and Assessment",
-  "International Journal of Stress Management" = "International Journal of Stress Management",
-  "International Journal of Training and Development" = "International Journal of Training and Development",
-  "International Review of Industrial and Organizational Psychology" = "International Review of Industrial and Organizational Psychology",
-  "Journal of Applied Psychology" = "Journal of Applied Psychology",
-  "Journal of Applied Social Psychology" = "Journal of Applied Social Psychology",
-  "Journal of Behavioral Decision Making" = "Journal of Behavioral Decision Making",
-  "Journal of Business and Psychology" = "Journal of Business and Psychology",
-  "Journal of Educational Measurement" = "Journal of Educational Measurement",
-  "Journal of Experimental Psychology: General" = "Journal of Experimental Psychology: General",
-  "Journal of Individual Differences" = "Journal of Individual Differences",
-  "Journal of Leadership and Organizational Studies" = "Journal of Leadership and Organizational Studies",
-  "Journal of Management Studies" = "Journal of Management Studies",
-  "Journal of Management" = "Journal of Management",
-  "Journal of Managerial Psychology" = "Journal of Managerial Psychology",
-  "Journal of Occupational and Organizational Psychology" = "Journal of Occupational and Organizational Psychology",
-  "Journal of Occupational Health Psychology" = "Journal of Occupational Health Psychology",
-  "Journal of Organizational Behavior Management" = "Journal of Organizational Behavior Management",
-  "Journal of Organizational Behavior" = "Journal of Organizational Behavior",
-  "Journal of Personality and Social Psychology" = "Journal of Personality and Social Psychology",
-  "Journal of Personality" = "Journal of Personality",
-  "Journal of Research in Personality" = "Journal of Research in Personality",
-  "Journal of Vocational Behavior" = "Journal of Vocational Behavior",
-  "Judgment and Decision Making" = "Judgment and Decision Making",
-  "Leadership Quarterly" = "Leadership Quarterly",
-  "Military Psychology" = "Military Psychology",
-  "Organization Science" = "Organization Science",
-  "Organizational Behavior and Human Decision Processes" = "Organizational Behavior and Human Decision Processes",
-  "Organizational Dynamics" = "Organizational Dynamics",
-  "Organizational Psychology Review" = "Organizational Psychology Review",
-  "Organizational Research Methods" = "Organizational Research Methods",
-  "Personality and Individual Differences" = "Personality and Individual Differences",
-  "Personnel Psychology" = "Personnel Psychology",
-  "Personnel Review" = "Personnel Review",
-  "Perspectives on Psychological Science" = "Perspectives on Psychological Science",
-  "Psychological Bulletin" = "Psychological Bulletin",
-  "Psychological Methods" = "Psychological Methods",
-  "Psychological Review" = "Psychological Review",
-  "Psychological Science" = "Psychological Science",
-  "Psychometrika" = "Psychometrika",
-  "Public Personnel Management" = "Public Personnel Management",
-  "Research in Organizational Behavior" = "Research in Organizational Behavior",
-  "Research in Personnel and Human Resources Management" = "Research in Personnel and Human Resources Management",
-  "Small Group Research" = "Small Group Research",
-  "Strategic Management Journal" = "Strategic Management Journal",
-  "The International Journal of Human Resource Management" = "The International Journal of Human Resource Management",
-  "The Personnel Administrator" = "The Personnel Administrator",
-  "Work and Stress" = "Work and Stress"
+  # download button
+  downloadButton('my_trends', 'Download'),
+
+  # hover text
+  tippy::tippy(
+    "<br/>&#9432;",
+    "<div class = \"largerfont\"> Filename *MUST* include \".csv\" so that the file can be opened 
+                                  by your machine, and its associated spreadsheet software. </div>"
+  ),
+  width = "350px"
 )
 
-# App -------------------------------------------------------------------------
-ui <- fluidPage(
-  
-  
-  # Defining CSS ------------------------------------------------------------
-  
+# Defining CSS script
+body <- dashboardBody(
   tags$style(
     type = "text/css",
     ".shiny-output-error { visibility: hidden; }",
@@ -124,243 +160,136 @@ ui <- fluidPage(
 }",
     ".largerfont {
     font-size: 130%;
-    }"
-  ),
+    }",
+    "p {
+    text-indent:12px; 
+    font-size: 18px;
+    }",
+    ".label-primary { visibility: hidden;}",
+    ".menu {max-height: none;}",
+    ".tippy-popper {max-width: 250px;}",
+    ".textlist {text-indent: -1.3em;
+                margin-left: 40px;}"),
   
-  # Creating Title Pane -----------------------------------------------------
+  tags$head(tags$style(HTML('
+  .navbar-nav>.messages-menu>.dropdown-menu>li .menu {
+  max-height:none;
+  }
+  '))),
   
-  titlePanel(div( h1("Trends in Industrial-Organizational Psychology and Related Journals"),
-                  h3(span("By"),
-                     em(a("James Rigby, M.A., University of Houston", href = "mailto:jrigby@uh.edu")),
-                     span("and"),
-                     em(a("Zach Traylor, M.S., Texas A & M", href = "mailto:zktraylor@gmail.com"))
-                  ))),
   
-  # Defining Inputs ---------------------------------------------------------
-  sidebarLayout(
-    sidebarPanel(
-      # Year Filter
-      sliderInput(
-        inputId = "yearrange",
-        label = "Published after",
-        min = 1930,
-        max = 2019,
-        value = c(1930, 2019),
-        sep = ""
-      ),
-      
-      # Hover Info
-      tippy::tippy("&#9432;", "<div class = \"largerfont\"> Use the slider to limit your search to a certain date range. </div>"),
-      
-      # User defined queries input
-      textInput(
-        inputId = "oneword",
-        label = "Search Terms/Phrases",
-        value = "personality, general mental ability, training"
-      ),
-      # Hover Info
-      tippy::tippy("&#9432;", "<div class = \"largerfont\">Individual terms and/or phrases may be used to search the database. For searches using more than one word and/or phrase, a comma must be placed between them (i.e., search phrase 1, search prase 2). Power users can employ regular expressions within their queries.</div>"),
-      # Minimum Match Count Input
-      numericInput(
-        inputId = "cutoff",
-        label = "Minimum Match Count",
-        min = 1,
-        max = 30,
-        step = 1,
-        value = 1
-      ),
-      # Hover Info
-      tippy::tippy("&#9432;", 
-                "<div class = \"largerfont\">By increasing the frequency with which queries must occur in each abstract in order to be included in the results, one can mitigate the number of false positives (Type I errors).</div>"),
-      # Plot by Proportion? input
-      radioButtons(
-        inputId = "prop",
-        label = "Plot Proportion of Articles Published",
-        selected = FALSE,
-        choices = c("Yes" = TRUE, "No" = FALSE)
-      ),
-      # Hover Info
-      tippy::tippy("&#9432;",  
-                "<div class = \"largerfont\">Select \"Yes\" to plot the proportion of aricles on the Y axis instead of raw frequency. Note that proportions are based on SCOPUS database coverage. Weak coverage will result in inaccurate proportions, and earlier dates have noticeably weaker coverage.</div>"),
-      
-      # Plot by Journal? input
-      radioButtons(
-        inputId = "journ",
-        label = "Plot by Journal",
-        selected = FALSE,
-        choices = c("Yes" = TRUE, "No" = FALSE)
-      ),
-      
-      # Hover Info
-      tippy::tippy("&#9432;<br/>",  
-                "<div class = \"largerfont\">Select \"Yes\" to search results for each journal separately.</div>"),
-      
-      # Download Button
-      downloadButton('my_trends', 'Download'),
-      
-      # Hover Info
-      tippy::tippy("<br/>&#9432;",  
-                "<div class = \"largerfont\">Make sure to include \".csv\" in the filename so that the file is associated with your spreadsheet viewer.</div>")
-    ),
-    
-    
-    # Defining application body -----------------------------------------------
-    mainPanel(
-      tabsetPanel(
-        type = "tabs",
-        
-        # Creating Overview Panel -------------------------------------------------
-        tabPanel(
-          "Overview",
-          br(),
-          h4(
-            "The purpose of this application is to help quickly identify emerging
-             trends among major I-O journals (and related literatures) by counting and
-             plotting the frequency of word/phrase usage in the abstracts of scholarly
-             publications from 85 peer-reviewed journals between 1950 and May, 2019."
-          ),
-          br(),
-          h4(
-            "Data were collected from SCOPUS, and word/phrase usage reflects the frequency
-             with which abstracts include the user-specifed words/phrases."
-          ),
-          br(),
-          h4(
-            "Please note that this app is currently in Beta, and there are still a few bugs
-             that need to be resolved.  If you encounter any errors or have suggestions, please
-             feel free to contact the author below."
-          )
-        ),
-        
-        
-        
-        # Defining Plot Panel -----------------------------------------------------
-        tabPanel(
-          "Plot",
-          br(),
-          plotlyOutput("plot1")
-        ),
-        
-        
-        # Defining Citation Rate Panel --------------------------------------------
-        
-        tabPanel(
-          "Citation Rates",
-          br(),
-          plotlyOutput("plot2"),
-          br(),
-          dataTableOutput("citetest"),
-          h4(
-            "The relationship between user-specified words/phrases and citation rates is estimated
-               using Poisson regression.  Separate regressions are estimated for each decade.
-               Although this is not a perfect method (e.g., cut points are arbitrary by nature),
-               doing so permits the estimation of nonlinear changes in slopes over time (which
-               frequently occurs when moratoriums are called [e.g., Mischel (1968) and the
-               subsequent lack of personality/individual differences research])."
-          ),
-          br(),
-          h4(
-            "Estimates are reported under the \"Estimate Without\" and \"Estimate With\" columns,
-               and raw coefficients are reported underneath the \"Effect\" column.  Articles that meet
-               or exceed the user's specified Minimum Match Count threshold are retained for the analyses."
-          )
-        ),
-        
-        
-        # Journal Filter Tabs -----------------------------------------------------
-        tabPanel(
-          "Journal Selection",
-          h3("Journals to Include in Analysis:"),
-          tags$div(class = "multicol",
-                   checkboxGroupInput(
-                     "journal",
-                     label = NULL,
-                     j_names, 
-                     selected = c("Journal of Applied Psychology",
-                                  "Personnel Psychology",
-                                  "Academy of Management Journal",
-                                  "Journal of Management",
-                                  "Journal of Occupational and Organizational Psychology",
-                                  "International Journal of Selection and Assessment",
-                                  "Organizational Behavior and Human Decision Processes",
-                                  "Journal of Vocational Behavior",
-                                  "Academy of Management Review",
-                                  "Psychological Bulletin",
-                                  "Human Performance",
-                                  "American Psychologist",
-                                  "Journal of Business and Psychology",
-                                  "Leadership Quarterly",
-                                  "Journal of Applied Social Psychology",
-                                  "Journal of Occupational Health Psychology",
-                                  "Applied Psychology"
-                     )
-                   )
-                   
-          ), 
-          actionButton("selectall", label="Select All"),
-          actionButton("deselectall", label="Deselect All")
-          
-          
-        ),
-        
-        
-        # Tabular representation of search results --------------------------------
-        tabPanel("Dataset",
-                 br(),
-                 dataTableOutput("table")),
-        
-        
-        # Providing data base information -----------------------------------------
-        tabPanel(
-          "Database Coverage",
-          h3(
-            "The table below contains information about the number of articles stored in the application
-                    database for each year. Users can employ this table as a diagnostic tool to verify the reliability
-                    of the data presented."
-          ),
-          dataTableOutput(outputId = "coverage")
-        ),
-        
-        
-        # Instructions tab --------------------------------------------------------
-        tabPanel(
-          "Instructions",
-          br(),
-          h3("Search Terms/Phrases Text Input"),
-          h4(
-            "Individual terms and/or phrases may be used to search the database.  For searches
-             using more than one word and/or phrase, a comma (i.e., \",\") must be placed
-             between them."
-          ),
-          br(),
-          h3("Minimum Match Count"),
-          h4(
-            "By increasing the frequency with which search terms/phrases must occur in each
-             abstract in order to be included in the results of one's query, one can mitigate
-             the extent of false positives (Type I errors) present in database generated in
-             accordance with the specified search terms/phrases."
-          ),
-          br(),
-          h3("Plotting the Search Terms/Phrases"),
-          h4(
-            "Plots can be generated using (1) all journals, or (2) each individual
-             journal that is presently included in the database.  Hovering the cursor
-             over any given datapoint reveals the number of articles published in that year
-             (aggregated across journals or by individual journal).  Journals can also be
-             hidden/removed from the plot by clicking on the name of the journal in the
-             legend to the immediate right of the plot.  Axes can be rescaled by clicking
-             and making a rectangular selection inside of the plot, and the \"reset axes\"
-             button in the toolbar will revert the plot back to its original scale."
-          ),
-          br(),
-          h3("Dataset"),
-          h4(
-            "Articles that meet the search criteria are searchable, sortable, and
-             downloadable.  Please note that filenames *must* include a file extension
-             to successfully download the datafile (e.g., my_data.csv, *not* my_data)."
-          )
-        )
+  tabItems(
+    tabItem(tabName = "plts_and_analytics",
+            fluidRow(
+              box(title = "Publication Trends for User-Specified Query",
+                  width = 12,
+                  plotlyOutput("plot1"))
+            ),
+            fluidRow(
+              box(title = "Citation Trends for User-Specified Query",
+                  width = 6,
+                  plotlyOutput("plot2")),
+              box(
+                title = "Do People Cite the User-Specified Query More Than Other Articles?",
+                width = 6,
+                DT::DTOutput("citetest")
+              )
+            )),
+    tabItem(
+      tabName =  "searchresults",
+      box(
+        title = "Search Results",
+        width = "100%",
+        height = "100%",
+        DT::DTOutput("table")
       )
-    )
+    ),
+    tabItem(
+      tabName =  "database_coverage",
+      box(
+        title = "Database Coverage",
+        width = "100%",
+        height = "100%",
+        DT::DTOutput(outputId = "coverage")
+      )
+    ),
+    tabItem(tabName = "journal_selection",
+            box(
+              title = "Journal Selection",
+              width = 12,
+              tags$div(
+                class = "multicol",
+                checkboxGroupInput(
+                  "journal",
+                  label = NULL,
+                  j_names,
+                  selected = c(
+                    "Journal of Applied Psychology",
+                    "Personnel Psychology",
+                    "Academy of Management Journal",
+                    "Journal of Management",
+                    "Journal of Occupational and Organizational Psychology",
+                    "International Journal of Selection and Assessment",
+                    "Organizational Behavior and Human Decision Processes",
+                    "Journal of Vocational Behavior",
+                    "Academy of Management Review",
+                    "Psychological Bulletin",
+                    "Human Performance",
+                    "American Psychologist",
+                    "Journal of Business and Psychology",
+                    "Leadership Quarterly",
+                    "Journal of Applied Social Psychology",
+                    "Journal of Occupational Health Psychology",
+                    "Applied Psychology"
+                  )
+                ),
+                br(),
+                actionButton("selectall", label = "Select All"),
+                actionButton("deselectall", label = "Deselect All")
+              )
+            )
+    ),
+    tabItem(tabName = "about",
+            box(
+                h1("Trends in Industrial-Organizational Psychology"),
+
+                h3(span("By"),
+                   em(a("James Rigby, M.A., University of Houston", href = "mailto:jrigby@uh.edu")),
+                   span("and"),
+                   em(a("Zach Traylor, M.S., Texas A&M University", href = "mailto:zktraylor@gmail.com"))),
+
+                p("The purpose of this application is to help quickly identify emerging
+                  trends among major I-O journals (and related literatures) by counting and
+                  plotting the frequency of term/phrase usage contained in the abstracts of scholarly
+                  publications from 85 peer-reviewed journals between 1950 and May, 2019.  
+                  Users impute search term(s) and/or phrase(s), and the app then uses the query to identify relevant articles.  
+                  The raw search results are located in the \"Tables\" Menu under the \"Search Results\" tab.  
+                  Additional analytics are reported under the \"Dashboard\" tab, which includes publication frequency visualizations, 
+                  citation rate visualizations, and citation rate analytics."),
+                
+                
+                p("Data were collected from SCOPUS (www.scopus.com).  The only requirement for inclusion in the operational database was that 
+                  articles must have been published in one of the journals listed under the \"Journal Selection\" tab.  
+                  After data were downloaded from SCOPUS, article metadata was verified and standardized within journal 
+                  because journal names and formatting have changed over the last 90 years.  
+                  In total, the operational database contains over 155,000 articles from 85 academic journals."),
+                
+                p("This application relies on four core functions to query the database, and each of which are heavily dependent on the tidyverse."),
+
+                p(class = "textlist", "(1) table_prep() returns the raw search results."),
+                p(class = "textlist","(2) tidy_trend_plot() plots the publication trends for articles matching the user-specified query."),
+                p(class = "textlist","(3) cite_plot() returns a plot comparing the citation rates of articles matching the user-specified query."),
+                p(class = "textlist","(4) cite_pred() returns the resultant statistical estimates of several poisson regression models predicting citation rates using a 
+                  binary indicator variable that stipulates whether the article matches the user-specified query.  The models are
+                  estimated separately by decade in order to better explore whether and the extent to which the user-specified query became more or less popular over time."),
+
+                p("Please note that this app is currently in Beta, and there are still a few bugs
+                  that need to be resolved.  If you encounter any errors or have suggestions, please
+                  feel free to contact either author using the above emails."),
+                
+                width = 12)
+            )
   )
 )
+
+ui <- dashboardPage(header, sidebar, body, skin = "purple")

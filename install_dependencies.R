@@ -23,7 +23,6 @@ if(!require(tippy)){
   install.packages(tippy)
 }
 
-
 library(shiny)
 library(shinyBS)
 library(tidyverse)

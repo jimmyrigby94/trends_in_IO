@@ -10,7 +10,7 @@ cite_pred <- function(data, date, group, unigram, threshhold) {
   date1 <- enquo(date)
   group1 <- enquo(group)
 
-  # replaces comma seporators with boolean operator and converts to lowercase (database has already been converted)
+  # replaces comma separators with boolean operators, and converts to lowercase (database already converted)
   unigram1 <- str_replace_all(unigram, pattern = ", ", "|") %>% tolower()
 
   # frequency counts for term/phrase matches per article
@@ -25,15 +25,16 @@ cite_pred <- function(data, date, group, unigram, threshhold) {
 
   temp <- count %>% 
           unnest(tidy_lm) %>%
-          ungroup()%>%
+          ungroup() %>%
           mutate(term = if_else(term == "(Intercept)", "Terms Not Present", "Terms Present")) %>%
           mutate_if(.predicate = is.numeric, funs(round), digits = 2)
 
   temp2 <- left_join(temp %>% filter(term != "Terms Not Present") %>% select(-term),
                      temp %>% filter(term == "Terms Not Present") %>%
                        select(decade, estimate) %>% rename(Mean = estimate)) %>%
-                       mutate(`Estimate With` = exp(Mean + estimate), `Estimate Without` = exp(Mean)) %>%
+                       mutate(`Estimate With` = round(exp(Mean + estimate),2), `Estimate Without` = round(exp(Mean),2)) %>%
                        select(Decade = decade, `Estimate Without`, `Estimate With`, Effect = estimate,
-                              `Standard Error` = std.error, Statistic = statistic, `P Value` = p.value) %>%
-                       arrange(Decade)
-}
+                              `Standard Error` = std.error, Estimate = statistic, `p-Value` = p.value) %>%
+                       arrange(Decade)%>%
+    as.data.frame(.)
+             }
