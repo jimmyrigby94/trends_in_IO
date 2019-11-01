@@ -4,28 +4,28 @@ Trends in I-O Psychology
 ## Trends in Industrial-Organizational Psychology
 
 As scientists search for new insights into the world of work, topics
-inevitably fall in and out of vogue.  Perhaps the most volatile and well
+inevitably fall in and out of vogue. Perhaps the most volatile and well
 recognized swings in research interests have been observed in
-personality research.  Walter Mischel’s 1968 book *Personality and
-Assessment* came to the gloomy conclusion that "[w]ith the possible
+personality research. Walter Mischel’s 1968 book *Personality and
+Assessment* came to the gloomy conclusion that “\[w\]ith the possible
 exception of intelligence, highly generalized behavioral consistencies
 have not been demonstrated, and the concept of personality traits as
-broad response predispositions is thus untenable."  After this book was
+broad response predispositions is thus untenable.” After this book was
 published, personality research for selection and assessment slowed
-considerably until about a decade later.  Identifying these trends (and
+considerably until about a decade later. Identifying these trends (and
 slumps) can help researchers and practitioners see where the field is
 headed, where it has been, and identify ideas and topics that should be
 brought to light once again.
 
 This app was designed to help researchers and practitioners identify
-current trends in industrial-organizational psychology.  It uses user-
-defined queries to search article abstracts in the IO psychology’s top
-scientific journals.  Search results are plotted over time, and users
+current trends in industrial-organizational psychology. It uses
+user-defined queries to search article abstracts in I-O psychology’s top
+scientific journals. Search results are plotted over time, and users
 have the option to focus on specific (or all) journals, and download a
-.csv file of their generated data.  Additionally, search results are
-used to predict citation rates across the decades.  Feel free to
-download and adapt the app to your needs, or submit a request and we
-will see if we can help.
+.csv file of their generated data. Additionally, search results are used
+to predict citation rates across the decades. Feel free to download and
+adapt the app to your needs, or submit a request and we will see if we
+can help.
 
 ## System Requirements
 
@@ -33,11 +33,13 @@ In addition to R and R Studio, this app depends on the following
 packages:
 
     1. shiny
-    2. tidyverse
-    3. tidytext
-    4. plotly
-    5. knitr
-    6. vroom
+    2. shinyBS
+    3. shinydashboard
+    4. tidyverse
+    5. tidytext
+    6. plotly
+    7. knitr
+    8. vroom
 
 Dependencies can easily be installed and loaded by running the following
 code.
@@ -49,7 +51,7 @@ source("https://raw.githubusercontent.com/jimmyrigby94/trends_in_IO/master/insta
 ## How to Run
 
 To run the app without downloading the repository, simply run the
-following code.
+following code from your console.
 
 ``` r
 shiny::runGitHub("trends_in_IO", username = "jimmyrigby94")
@@ -67,29 +69,33 @@ runApp()
 
 ## What’s New?
 
-  - Expanded the database coverage to include more than 30 new journals.
-  - Included visualizations of citation rates.
-  - Implemented data import using vroom for increased speed.
-  - Updated UI.
-  - Aesthetic improvements.
-  - Code improvements and clarity.
+  - Action buttons that quickly select and deselect all journals
+  - Complete overhaul of UI
+  - Refinement to visualizations
 
 ## Future Improvements
 
-  - Continuing refinement of visualizations and UI.
   - Action buttons that quickly select a subcategory of journals (i.e.,
-    Research Methods).
-  - Identification of emerging subtopics related to search.
+    Research Methods, OHP)
+  - Identification of emerging subtopics related to search
   - Implementation of TF-IDF ranking
   - Outlet recommendations
 
 ## Screenshots
 
-![Overview](supl/Overview.png)
+![Overview](supl/dashboard.PNG)
 
-![Instructions](supl/Instructions.png)
+![Instructions](supl/search_results.png)
 
-![Trend by Publication Outlet](supl/journal%20trends.png) ![Overall
-Trend](supl/general%20trends.png) ![Search Results](supl/dataset.png)
-![Regression Results](supl/poisson%20regression.png) ![Journal
-Selection](supl/journal%20selection.png)
+![Trend by Publication Outlet](supl/journal%20selection.png)
+
+## Old Change Logs
+
+### September 2019
+
+  - Expanded the database coverage to include more than 30 new journals
+  - Included visualizations of citation rates
+  - Implemented data import using vroom for increased speed
+  - Updated UI
+  - Aesthetic improvements
+  - Code improvements and clarity

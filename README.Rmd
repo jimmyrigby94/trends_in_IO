@@ -12,11 +12,13 @@ This app was designed to help researchers and practitioners identify current tre
 In addition to R and R Studio, this app depends on the following packages:
 
     1. shiny
-    2. tidyverse
-    3. tidytext
-    4. plotly
-    5. knitr
-    6. vroom
+    2. shinyBS
+    3. shinydashboard
+    4. tidyverse
+    5. tidytext
+    6. plotly
+    7. knitr
+    8. vroom
 
 Dependencies can easily be installed and loaded by running the following code.
 
@@ -25,7 +27,7 @@ source("https://raw.githubusercontent.com/jimmyrigby94/trends_in_IO/master/insta
 ```
 
 ## How to Run
-To run the app without downloading the repository, simply run the following code.
+To run the app without downloading the repository, simply run the following code from your console.
 
 ```{r, eval=FALSE}
 shiny::runGitHub("trends_in_IO", username = "jimmyrigby94")
@@ -40,29 +42,34 @@ setwd("~/shiny_example")
 runApp()
 ```
 
-## What's New?
-- Expanded the database coverage to include more than 30 new journals
-- Included visualizations of citation rates
-- Implemented data import using vroom for increased speed
-- Updated UI
-- Aesthetic improvements
-- Code improvements and clarity
+## What's New? 
+- Action buttons that quickly select and deselect all journals
+- Complete overhaul of UI
+- Refinement to visualizations
+
 
 ## Future Improvements
-- Continuing refinement of visualizations and UI
-- Action buttons that quickly select a subcategory of journals (i.e., Research Methods)
+- Action buttons that quickly select a subcategory of journals (i.e., Research Methods, OHP)
 - Identification of emerging subtopics related to search
 - Implementation of TF-IDF ranking
 - Outlet recommendations
 
 ## Screenshots
 
-![Overview](supl/Overview.png)
+![Overview](supl/dashboard.PNG)
 
-![Instructions](supl/Instructions.png)
+![Instructions](supl/search_results.png)
 
-![Trend by Publication Outlet](supl/journal trends.png)
-![Overall Trend](supl/general trends.png)
-![Search Results](supl/dataset.png)
-![Regression Results](supl/poisson regression.png)
-![Journal Selection](supl/journal selection.png)
+![Trend by Publication Outlet](supl/journal selection.png)
+
+
+
+## Old Change Logs
+
+### September 2019
+- Expanded the database coverage to include more than 30 new journals
+- Included visualizations of citation rates
+- Implemented data import using vroom for increased speed
+- Updated UI
+- Aesthetic improvements
+- Code improvements and clarity

@@ -2,25 +2,28 @@ if(!require(shiny)){
   install.packages("shiny")
 }
 if(!require(shinyBS)){
-  install.packages(shinyBS)
+  install.packages('shinyBS')
 }
 if(!require(tidyverse)){
-  install.packages(tidyverse)
+  install.packages('tidyverse')
 }
 if(!require(tidytext)){
-  install.packages(tidytext)
+  install.packages("tidytext")
 }
 if(!require(plotly)){
-  install.packages(plotly)
+  install.packages("plotly")
 }
 if(!require(knitr)){
-  install.packages(knitr)
+  install.packages("knitr")
 }
 if(!require(vroom)){
-  install.packages(vroom)
+  install.packages("vroom")
 }
 if(!require(tippy)){
-  install.packages(tippy)
+  install.packages('tippy')
+}
+if(!require(shinydashboard)){
+  install.packages('shinydashboard')
 }
 
 library(shiny)
@@ -30,4 +33,4 @@ library(tidytext)
 library(plotly)
 library(knitr)
 library(vroom)
-library(tippy)
+library(shinydashboard)
