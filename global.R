@@ -19,6 +19,9 @@ source("cite_pred.R")
 source("download_prep.R")
 source("table_prep.R")
 source("cite_plot.R")
+source("prep_unigram.R")
+source("search_abstract.R")
+source("cited_by_models.R")
 
 # defines journal names for the named vector in order to reduce repeating code
 j_names <- c(

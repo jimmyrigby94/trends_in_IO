@@ -1,27 +1,15 @@
 # citation rates analyses
-cite_pred <- function(data, date, group, unigram, threshhold) {
-
-  # helper function
-  cited_by <- function(data) {
-                glm(`Cited by` ~ present, data = data, family = "poisson")
-              }
-
-  # tidy eval
-  date1 <- enquo(date)
-  group1 <- enquo(group)
-
-  # replaces comma separators with boolean operators, and converts to lowercase (database already converted)
-  unigram1 <- str_replace_all(unigram, pattern = ", ", "|") %>% tolower()
+cite_pred <- function(data) {
 
   # frequency counts for term/phrase matches per article
-  count <- data %>% mutate(word_freq = str_count(string = data$Abstract, pattern = unigram1),
-                           present = if_else(word_freq >= threshhold, 1, 0),
-                           decade = cut(Year,
-                           breaks = c(-Inf, 1960, 1970, 1980, 1990, 2000, 2010, 2020),
-                           right = TRUE,
-                           labels = c("Pre-1960s", "1960s", "1970s", "1980s", "1990s", "2000s", "2010s"))) %>%
-           group_by(decade) %>% nest() %>%
-           mutate(Model = map(data, cited_by), tidy_lm = map(Model, tidy))
+  count <- data %>% mutate(decade = cut(Year,
+                                        breaks = c(-Inf, 1960, 1970, 1980, 1990, 2000, 2010, 2020),
+                                        right = TRUE,
+                                        labels = c("Pre-1960s", "1960s", "1970s", "1980s", "1990s", "2000s", "2010s"))) %>%
+           group_by(decade) %>% 
+           nest() %>%
+           mutate(Model = map(data, cited_by_models), 
+                  tidy_lm = map(Model, tidy))
 
   temp <- count %>% 
           unnest(tidy_lm) %>%
@@ -34,7 +22,9 @@ cite_pred <- function(data, date, group, unigram, threshhold) {
                        select(decade, estimate) %>% rename(Mean = estimate)) %>%
                        mutate(`Estimate With` = round(exp(Mean + estimate),2), `Estimate Without` = round(exp(Mean),2)) %>%
                        select(Decade = decade, `Estimate Without`, `Estimate With`, Effect = estimate,
-                              `Standard Error` = std.error, Estimate = statistic, `p-Value` = p.value) %>%
+                              `Standard Error` = std.error, `t` = statistic, `p` = p.value) %>%
                        arrange(Decade)%>%
     as.data.frame(.)
-             }
+  
+  temp2
+}

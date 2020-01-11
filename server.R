@@ -1,59 +1,52 @@
 server <- function(input, output, session) {
   
+
+# Preporatory Reactive Environments ---------------------------------------
+  
   # parses the user-specified query
-  inp.unigram <- reactive({
-    as.vector(str_split(input$oneword, pattern = ", ", simplify = TRUE))
+  prepped_unigram <- reactive({
+    prep_unigram(input$oneword)
   })
   
-  # queries database with user-specified query
-  datasetInput <-
-    reactive({
-      table_prep(
-        data = master[master$`Source title` %in% input$journal,],
-        unigram = input$oneword,
-        threshhold = input$cutoff,
-        upper_year = input$yearrange[2],
-        lower_year = input$yearrange[1]
-      )
-    })
   
-  # preps user-specified search results for download
-  downloadinput <-
-    reactive({
-      download_prep(
-        data = master[master$`Source title` %in% input$journal,],
-        unigram = input$oneword,
-        threshhold = input$cutoff,
-        upper_year = input$yearrange[2],
-        lower_year = input$yearrange[1]
-      )
-    })
+
+  search_data<-  eventReactive(input$plot, {
+    search_abstract(data = master[master$`Source title` %in% input$journal,],
+                    unigram = prepped_unigram(),
+                    threshhold = input$cutoff,
+                    date = input$yearrange)
+  }, 
+  ignoreNULL = FALSE
+  )
+  
+  table_prep<-reactive({
+    search_data()%>%
+      filter(Present == "Present")%>%
+      arrange(desc(`Matching Terms`))%>%
+      select(Authors:DOI, `Matching Terms`)
+  })
+  
   
   # estimates citation rate models
   citedinput <-
     reactive({
       cite_pred(
-        data = master[master$`Source title` %in% input$journal,],
-        date = Year,
-        group = `Source title`,
-        unigram = input$oneword,
-        threshhold = input$cutoff
+        data = search_data()
       )
     })
   
+
+# Plots -------------------------------------------------------------------
+
   # plots publication trends
   output$plot1 <-
     renderPlotly({
       tidy_trend_plot(
-        data = master[master$`Source title` %in% input$journal,],
-        date = Year,
-        group = `Source title`,
-        unigram = input$oneword,
-        threshhold = input$cutoff,
+        data = search_data(),
         prop = input$prop,
         byjourn = input$journ,
-        upper_year = input$yearrange[2],
-        lower_year = input$yearrange[1]
+        date = input$yearrange,
+        journals = input$journal
       )
     })
   
@@ -61,23 +54,27 @@ server <- function(input, output, session) {
   output$plot2 <-
     renderPlotly({
       cite_plot(
-        data = master[master$`Source title` %in% input$journal,],
-        date = Year,
-        group = `Source title`,
-        unigram = input$oneword,
-        threshhold = input$cutoff
+        data = search_data()
       )
     })
   
+
+# Tables ------------------------------------------------------------------
+
   # outputs tabular data
   output$table <-
-    DT::renderDT(datasetInput(), options = list(pageLength = 50))
+    DT::renderDT(table_prep(), options = list(pageLength = 50))
   
   output$coverage <-
-    DT::renderDT(master[master$`Source title` %in% input$journal,] %>% count(Year, `Source title`) %>% arrange(Year),
+    DT::renderDT(search_data() %>% 
+                   count(Year, `Source title`) %>% 
+                   arrange(Year),
                     options = list(pageLength = 50))
   
   output$citetest <- DT::renderDT(citedinput())
+  
+
+# Event Handlers ----------------------------------------------------------
   
   # handler for select all and deselect all
   # one observe context for deselect
@@ -112,7 +109,7 @@ server <- function(input, output, session) {
         paste("trends", Sys.Date(), ".csv", sep = "")
       },
       content = function(fname) {
-        write.csv(downloadinput(), fname, row.names = FALSE)
+        write.csv(table_prep(), fname, row.names = FALSE)
       }
     )
 }
