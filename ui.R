@@ -84,10 +84,11 @@ sidebar <- dashboardSidebar(
     tippy::tippy(
       "&#9432;",
       "<div class = \"largerfont\"> Individual terms and/or phrases may be used to search the database.  
-                                  For searches with more than one word and/or phrase, a comma *MUST* 
+                                  For searches with more than one word and/or phrase, a comma <em>must</em> 
                                   be placed between them (i.e., search phrase 1, search prase 2).  
                                   Users may also use regular expressions within their queries. </div>"
     ),
+    actionButton("plot", "Search"),
     
     h4("Navigation"),
     menuItem(
@@ -103,21 +104,16 @@ sidebar <- dashboardSidebar(
       selected = FALSE
     ),
     menuItem(
-      "Tables",
-      tabName = "tables",
-      icon = icon("table"),
-      selected = FALSE,
-      menuSubItem(      "Search Results",
-                        tabName = "searchresults",
-                        icon = icon("table"),
-                        selected = FALSE),
+            "Search Results",
+            tabName = "searchresults",
+            icon = icon("table"),
+            selected = FALSE),
       menuItem(
         "Database Coverage",
         tabName = "database_coverage",
         icon = icon("signal"),
         selected = FALSE
-      )
-    ),
+      ),
 
     menuItem(
       "About",
@@ -126,14 +122,13 @@ sidebar <- dashboardSidebar(
       selected = FALSE
     )
   ),
-
   # download button
   downloadButton('my_trends', 'Download'),
 
   # hover text
   tippy::tippy(
     "<br/>&#9432;",
-    "<div class = \"largerfont\"> Filename *MUST* include \".csv\" so that the file can be opened 
+    "<div class = \"largerfont\"> Filename <em>must</em> include \".csv\" so that the file can be opened 
                                   by your machine, and its associated spreadsheet software. </div>"
   ),
   width = "350px"
@@ -162,7 +157,6 @@ body <- dashboardBody(
     font-size: 130%;
     }",
     "p {
-    text-indent:12px; 
     font-size: 18px;
     }",
     ".label-primary { visibility: hidden;}",
