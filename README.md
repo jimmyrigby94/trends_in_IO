@@ -69,9 +69,10 @@ runApp()
 
 ## What’s New?
 
-  - Action buttons that quickly select and deselect all journals
-  - Complete overhaul of UI
-  - Refinement to visualizations
+  - Significant speed imporvements
+  - reorganization of internals
+  - Action but for new search
+  - Correcting a few errors
 
 ## Future Improvements
 
@@ -90,6 +91,12 @@ runApp()
 ![Trend by Publication Outlet](supl/journal%20selection.png)
 
 ## Old Change Logs
+
+### October 2019
+
+  - Action buttons that quickly select and deselect all journals
+  - Complete overhaul of UI
+  - Refinement of visualizations
 
 ### September 2019
 
