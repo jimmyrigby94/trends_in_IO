@@ -71,8 +71,8 @@ runApp()
 
   - Significant speed imporvements
   - reorganization of internals
-  - Action but for new search
-  - Correcting a few errors
+  - Action button for creating new search
+  - Correcting a few typos and formatting errors
 
 ## Future Improvements
 
