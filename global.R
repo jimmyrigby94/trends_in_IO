@@ -9,10 +9,7 @@ library(vroom)
 library(shinydashboard)
 
 # import data
-master <- rbind(vroom("MasterFinal_060219_1.csv", col_names = T),
-                vroom("MasterFinal_060219_2.csv", col_names = T),
-                vroom("MasterFinal_060219_3.csv", col_names = T))
-
+master <- readRDS("my_environ.Rdata")
 # import dependencies
 source("tidy_trend_plot.R")
 source("cite_pred.R")
