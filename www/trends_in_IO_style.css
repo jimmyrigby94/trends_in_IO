@@ -1,0 +1,117 @@
+h2 { text-align: left; }
+
+.multicol {
+
+      -webkit-column-count: 3; /* Chrome, Safari, Opera */
+      -moz-column-count: 3; /* Firefox */
+      -ms-column-count: 3;
+      column-count: 3;
+
+    }
+    
+    
+a {display: inline;}
+p {font-size: 18px;}
+
+.label-primary { visibility: hidden;}
+
+.menu {max-height: none;}
+
+.tippy-popper {max-width: 250px;}
+
+.textlist {text-indent: -1.3em;
+           margin-left: 40px;
+}
+           
+.form-group {
+    margin-bottom: 1px;
+}
+
+.largerfont {
+    font-size: 130%;
+    }
+    
+.button {
+  font: bold 11px Arial;
+  text-decoration: none;
+  background-color: #EEEEEE;
+  color: #333333;
+  padding: 2px 6px 2px 6px;
+  border-top: 1px solid #CCCCCC;
+  border-right: 1px solid #333333;
+  border-bottom: 1px solid #333333;
+  border-left: 1px solid #CCCCCC;
+}
+
+.irs-bar {
+    height: 8px;
+    top: 25px;
+    border-top: 1px solid #a8605c;
+    border-bottom: 1px solid 	#a8605c;
+    background: 	#a8605c;
+}
+
+.irs-grid-pol {
+  background: 	#a8605c;
+}
+
+.irs-grid-pol.small {
+  background: 	#a8605c;
+}
+
+.irs-min, .irs-max, .irs-from, .irs-to{
+  background: 	#a8605c;
+}
+
+.shiny-output-error { visibility: hidden; }
+.shiny-output-error: before { visibility: hidden; }
+
+.navbar-nav>.messages-menu>.dropdown-menu>li .menu {
+  max-height:none;
+  }
+
+/*
+.skin-purple {
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+*/
+  
+.btn2 {
+    font-size: 2em;
+    padding-left: 5%;
+    padding-right: 5%;
+    margin-left: 30px;
+    margin-right: 30px;
+    text-align: left;
+    color: white;
+    background: #222d32;
+    text-indent: 4px;
+    border-radius: 0;
+    border-color: transparent;
+    box-shadow: 0 2px 5px 0 rgba(0,0,0,0.18), 0 1px 5px 0 rgba(0,0,0,0.15);
+    text-transform: uppercase;
+    -webkit-transition: all 0.25s cubic-bezier(0.02, 0.01, 0.47, 1);
+    -moz-transition: all 0.25s cubic-bezier(0.02, 0.01, 0.47, 1);
+    -o-transition: all 0.25s cubic-bezier(0.02, 0.01, 0.47, 1);
+    transition: all 0.25s cubic-bezier(0.02, 0.01, 0.47, 1);
+    -webkit-transform: translate3d(0, 0, 0);
+    -moz-transform: translate3d(0, 0, 0);
+    -ms-transform: translate3d(0, 0, 0);
+    -o-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+}
+
+.btn2:hover, .btn2:active, .btn2:visited {
+    background: #a8605c;
+    color: white;
+}
+
+.skin-purple .sidebar-menu>li.active>a, .skin-purple .sidebar-menu>li:hover>a {
+  background: #222d32;
+  border-left-color: #222d32;
+}
+
+.centerdiv {
+  width: 100%;
+  margin: auto;
+}
