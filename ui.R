@@ -1,129 +1,104 @@
-# header
+# header --------------------------------------------------------------------------------------------------------------------------------------------
 header <- dashboardHeader(title = "Trends in I-O Psychology", 
-                          titleWidth  = "350px", 
-                          
-                          # Places Search and Plot options as Dropdowns in Header
-                          dropdownMenu(headerText = "Refine Search",
-                                       icon = "Refine Search",
-                                       menuItem(
-                                       sliderInput(
-                                         inputId = "yearrange",
-                                         label = "Published After",
-                                         min = 1930,
-                                         max = 2019,
-                                         value = c(1930, 2019),
-                                         sep = ""
-                                       )),
-                                       menuItem(  tippy::tippy(
-                                         "&#9432;",
-                                         "<div class = \"largerfont\"> Use slider to limit search to a specific year range. </div>"
-                                       )),
-                                       menuItem(
-                                         numericInput(
-                                           inputId = "cutoff",
-                                           label = "Minimum Match Count",
-                                           min = 1,
-                                           max = 30,
-                                           step = 1,
-                                           value = 1
-                                         )),
-                                       # hover text
-                                       menuItem(tippy::tippy(
-                                         "&#9432;",
-                                         "<div class = \"largerfont\"> By increasing the frequency with which queries must occur in a given abstract 
-                                                for inclusion in one's search results, one can mitigate the number of false 
-                                                positives (Type I errors). </div>"
-                                       ))),
-                          dropdownMenu(headerText = "Plot Options",
-                                         icon =  "Plot Options",
-                                       menuItem(
-                                       # plot by proportion input
-                                       radioButtons(
-                                         inputId = "prop",
-                                         label = "Plot Proportion of Published Articles",
-                                         selected = FALSE,
-                                         choices = c("Yes" = TRUE, "No" = FALSE)
-                                       )),
-                                       # hover text
-                                       menuItem(
-                                       tippy::tippy(
-                                         "&#9432;",
-                                         "<div class = \"largerfont\"> Select \"Yes\" to plot the proportion of published articles on the Y axis (instead of raw frequencies).  
-                                  Note that proportions are based on SCOPUS database coverage.  Weak coverage will invariably result in 
-                                  inaccurate proportion estimates, and earlier dates have notably weaker coverage. </div>"
-                                       )),
-                                       
-                                       # plot by journal input
-                                      menuItem(radioButtons(
-                                         inputId = "journ",
-                                         label = "Plot by Journal",
-                                         selected = FALSE,
-                                         choices = c("Yes" = TRUE, "No" = FALSE)
-                                       )),
-                                       # hover text
-                                      menuItem(
-                                       tippy::tippy(
-                                         "&#9432;<br/>",
-                                         "<div class = \"largerfont\"> Select \"Yes\" to plot search results for each journal separately. </div>"
-                                       ))
-                          )
+                          titleWidth  = "350px"
                                         )
 
-# sidebar
+# sidebar ----------------------------------------------------------------------------------------------------------------------------------------
 sidebar <- dashboardSidebar(
   sidebarMenu(
-    h4("Search"),
-    
+ tags$div(
+   tags$p("Search Options", style = "font-family = 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif; font-size: 1.5em; font-weight: 700;"),
     # user-defined query input
     textInput(
       inputId = "oneword",
       label = NULL,
-      value = "personality, general mental ability, training"
+      value = "personality, general mental ability"
     ),
-    # hover text
-    tippy::tippy(
-      "&#9432;",
-      "<div class = \"largerfont\"> Individual terms and/or phrases may be used to search the database.  
+   # hover text
+   tippy::tippy(
+     "&#9432;",
+     "<div class = \"largerfont\"> Individual terms and/or phrases may be used to search the database.  
                                   For searches with more than one word and/or phrase, a comma <em>must</em> 
                                   be placed between them (i.e., search phrase 1, search prase 2).  
                                   Users may also use regular expressions within their queries. </div>"
+   ),
+   
+   menuItem(
+     "Journal Selection",
+     tabName = "journal_selection",
+     icon = icon("check-square"),
+     selected = FALSE
+   ),
+   numericInput(
+     inputId = "cutoff",
+     label = "Minimum Match Count",
+     min = 1,
+     max = 30,
+     step = 1,
+     value = 1
+   ),
+   tippy::tippy(
+     "&#9432;",
+     "<div class = \"largerfont\"> By increasing the frequency with which queries must occur in a given abstract 
+                                                for inclusion in one's search results, one can mitigate the number of false 
+                                                positives (Type I errors). </div>"
+   ),
+   
+   actionButton("plot", 
+                "Update",
+                icon = icon("search"),
+                style = "color: black; margin-left: 15px; margin-bottom: 5px;"
+   ),
+    sliderInput(
+      inputId = "yearrange",
+      label = "Published After",
+      min = 1930,
+      max = 2019,
+      value = c(1930, 2019),
+      sep = ""
     ),
-    actionButton("plot", "Search"),
-    
-    h4("Navigation"),
-    menuItem(
-      "Dashboard",
+    tippy::tippy(
+      "&#9432;",
+      "<div class = \"largerfont\"> Use slider to limit search to a specific year range. </div>"
+    ),
+   tags$br(),
+    tags$p("Plot Options", style = "font-family = 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif; font-size: 1.5em; font-weight: 700;"),
+   radioButtons(
+     inputId = "prop",
+     label = "Plot Proportion of Published Articles",
+     selected = TRUE,
+     choices = c("Yes" = TRUE, "No" = FALSE)
+   ),
+   tippy::tippy(
+     "&#9432;",
+     "<div class = \"largerfont\"> Select \"Yes\" to plot the proportion of published articles on the Y axis (instead of raw frequencies).  
+                                  Note that proportions are based on SCOPUS database coverage.  Weak coverage will invariably result in 
+                                  inaccurate proportion estimates, and earlier dates have notably weaker coverage. </div>"
+   ),
+   
+   radioButtons(
+     inputId = "journ",
+     label = "Plot by Journal",
+     selected = FALSE,
+     choices = c("Yes" = TRUE, "No" = FALSE)
+   ),
+   tippy::tippy(
+     "&#9432;<br/>",
+     "<div class = \"largerfont\"> Select \"Yes\" to plot search results for each journal separately. </div>"
+   ),
+
+  menuItem(
+      "",
       tabName = "plts_and_analytics",
-      icon = icon("th"),
       selected = TRUE
     ),
-    menuItem(
-      "Journal Selection",
-      tabName = "journal_selection",
-      icon = icon("check-square"),
-      selected = FALSE
-    ),
-    menuItem(
-            "Search Results",
-            tabName = "searchresults",
-            icon = icon("table"),
-            selected = FALSE),
-      menuItem(
-        "Database Coverage",
-        tabName = "database_coverage",
-        icon = icon("signal"),
-        selected = FALSE
-      ),
-
-    menuItem(
-      "About",
-      tabName = "about",
-      icon = icon("question"),
-      selected = FALSE
-    )
+    style = "font-size: 1.5em; padding-left: 2.5%;")
   ),
   # download button
-  downloadButton('my_trends', 'Download'),
+  downloadButton('my_trends', 
+                 'Download', 
+                 icon = icon("download"),
+                 style = "color: black; margin-left: 15px; margin-bottom: 5px;"),
 
   # hover text
   tippy::tippy(
@@ -134,47 +109,27 @@ sidebar <- dashboardSidebar(
   width = "350px"
 )
 
-# Defining CSS script
+# Body ------------------------------------------------------------------------------------------------------------
 body <- dashboardBody(
-  tags$style(
-    type = "text/css",
-    ".shiny-output-error { visibility: hidden; }",
-    ".shiny-output-error: before { visibility: hidden; }",
-    "h2 { text-align: left; }",
-    "    .multicol {
 
-      -webkit-column-count: 3; /* Chrome, Safari, Opera */
+  tags$head(
+    tags$link(rel = "stylesheet", type = "text/css", href = "trends_in_IO_style.css")
+  ),
+  tags$div(
 
-        -moz-column-count: 3; /* Firefox */
-
-        column-count: 3;
-
-    }",
-    ".form-group {
-    margin-bottom: 1px;
-}",
-    ".largerfont {
-    font-size: 130%;
-    }",
-    "p {
-    font-size: 18px;
-    }",
-    ".label-primary { visibility: hidden;}",
-    ".menu {max-height: none;}",
-    ".tippy-popper {max-width: 250px;}",
-    ".textlist {text-indent: -1.3em;
-                margin-left: 40px;}"),
-  
-  tags$head(tags$style(HTML('
-  .navbar-nav>.messages-menu>.dropdown-menu>li .menu {
-  max-height:none;
-  }
-  '))),
-  
-  
+    tags$div(
+    tags$a(tags$i(class = "fa fa-chart-line"), "Dashboard", class = "btn2", href = "#shiny-tab-plts_and_analytics", `data-value` = "plts_and_analytics", `data-toggle`="tab"),
+    
+    tags$a(tags$i(class = "fa fa-table"), "Search Results", class = "btn2", href = "#shiny-tab-searchresults", `data-value` = "searchresults", `data-toggle`="tab"),
+    
+    tags$a(tags$i(class = "fa fa-signal"), "Database Coverage", class = "btn2", href = "#shiny-tab-database_coverage", `data-value` = "database_coverage", `data-toggle`="tab"),
+    
+    tags$a(tags$i(class = "fa fa-question"), "About", class = "btn2", href = "#shiny-tab-about", `data-value` = "about", `data-toggle`="tab"),
+    class = "centerdiv"),
+  style = "margin-bottom: 15px; width: 100%;"),
   tabItems(
     tabItem(tabName = "plts_and_analytics",
-            fluidRow(
+           fluidRow(
               box(title = "Publication Trends for User-Specified Query",
                   width = 12,
                   plotlyOutput("plot1"))
