@@ -26,6 +26,10 @@ if(!require(shinydashboard)){
   install.packages('shinydashboard')
 }
 
+if(!require(DT)){
+  install.packages('DT')
+}
+
 library(shiny)
 library(shinyBS)
 library(tidyverse)
