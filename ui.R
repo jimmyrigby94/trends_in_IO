@@ -5,30 +5,32 @@ header <- dashboardHeader(title = "Trends in I-O Psychology",
 
 # sidebar ----------------------------------------------------------------------------------------------------------------------------------------
 sidebar <- dashboardSidebar(
+  introBox(
   sidebarMenu(
  tags$div(
    tags$p("Search Options", style = "font-family = 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif; font-size: 1.5em; font-weight: 700;"),
     # user-defined query input
+   introBox(
     textInput(
       inputId = "oneword",
       label = NULL,
       value = "personality, general mental ability"
     ),
-   # hover text
-   tippy::tippy(
-     "&#9432;",
-     "<div class = \"largerfont\"> Individual terms and/or phrases may be used to search the database.  
-                                  For searches with more than one word and/or phrase, a comma <em>must</em> 
-                                  be placed between them (i.e., search phrase 1, search prase 2).  
-                                  Users may also use regular expressions within their queries. </div>"
-   ),
-   
+   data.step=2,
+   data.intro = "Enter your search terms or phrases here. <br><br> Separate multiple terms with a comma. For example, if you wanted to search for abstracts that contain personality <em>or</em> general mental ability type: \"personality, general mental ability\".<br> <br>Power users can also use regular expressions. For example, if you were interested in searching for networks or networking search \"network[[s]|[ing]]\""),
+   tags$br(),
+  introBox(
    menuItem(
      "Journal Selection",
      tabName = "journal_selection",
      icon = icon("check-square"),
      selected = FALSE
    ),
+   data.step = 3,
+   data.intro = "Click here to select which journals to include in your search. <br><br> Clicking this button will open up a separate window with a list of journal titles. Journals with a check next to them will be included in your search."
+   ),
+  tags$br(),
+  introBox(
    numericInput(
      inputId = "cutoff",
      label = "Minimum Match Count",
@@ -37,55 +39,56 @@ sidebar <- dashboardSidebar(
      step = 1,
      value = 1
    ),
-   tippy::tippy(
-     "&#9432;",
-     "<div class = \"largerfont\"> By increasing the frequency with which queries must occur in a given abstract 
-                                                for inclusion in one's search results, one can mitigate the number of false 
-                                                positives (Type I errors). </div>"
+   data.step = 4,
+   data.intro = "Sometimes an article may match your search by chance. You can increase the number of matching terms required to be included in your search results. This can reduce the number of false pasitives (Type I errors)"),
+   tags$br(),
+  introBox(
+   sliderInput(
+     inputId = "yearrange",
+     label = "Published After",
+     min = 1930,
+     max = 2019,
+     value = c(1930, 2019),
+     sep = ""
    ),
-   
+   data.step = 5,
+   data.intro = "Use the slider to restrict your search to a certain date range."),
+  tags$br(),
+   introBox(
    actionButton("plot", 
-                "Update",
+                "Search",
                 icon = icon("search"),
                 style = "color: black; margin-left: 15px; margin-bottom: 5px;"
    ),
-    sliderInput(
-      inputId = "yearrange",
-      label = "Published After",
-      min = 1930,
-      max = 2019,
-      value = c(1930, 2019),
-      sep = ""
-    ),
-    tippy::tippy(
-      "&#9432;",
-      "<div class = \"largerfont\"> Use slider to limit search to a specific year range. </div>"
-    ),
+   data.step = 6,
+   data.intro = "Click here to refresh the results after changing your search parameters."),
+  
    tags$br(),
-    tags$p("Plot Options", style = "font-family = 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif; font-size: 1.5em; font-weight: 700;"),
+   tags$hr(style = "color:white; width:90%; padding-left: 0;"),
+   tags$p("Plot Options", style = "font-family = 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif; font-size: 1.5em; font-weight: 700;"),
+  
+  introBox(
    radioButtons(
      inputId = "prop",
      label = "Plot Proportion of Published Articles",
      selected = TRUE,
      choices = c("Yes" = TRUE, "No" = FALSE)
    ),
-   tippy::tippy(
-     "&#9432;",
-     "<div class = \"largerfont\"> Select \"Yes\" to plot the proportion of published articles on the Y axis (instead of raw frequencies).  
-                                  Note that proportions are based on SCOPUS database coverage.  Weak coverage will invariably result in 
-                                  inaccurate proportion estimates, and earlier dates have notably weaker coverage. </div>"
-   ),
    
+   data.step = 7,
+   data.intro = "Select \"yes\" if you are interested in plotting the proportion of articles matching your search on the y-axis. Select \"no\" if you want to plot the raw frequencies. <br><br> Note that proportions are based on SCOPUS database coverage.  Weak coverage will invariably result in 
+                                  inaccurate proportion estimates, and earlier dates have notably weaker coverage."),
+   
+  introBox(
    radioButtons(
      inputId = "journ",
      label = "Plot by Journal",
      selected = FALSE,
      choices = c("Yes" = TRUE, "No" = FALSE)
    ),
-   tippy::tippy(
-     "&#9432;<br/>",
-     "<div class = \"largerfont\"> Select \"Yes\" to plot search results for each journal separately. </div>"
-   ),
+   data.step = 8,
+   data.intro = "If you want to plot journals separately select \"Yes\" otherwise select \"No\"."),
+
 
   menuItem(
       "",
@@ -94,24 +97,26 @@ sidebar <- dashboardSidebar(
     ),
     style = "font-size: 1.5em; padding-left: 2.5%;")
   ),
+ 
   # download button
+ introBox(
   downloadButton('my_trends', 
-                 'Download', 
+                 'Download .CSV', 
                  icon = icon("download"),
                  style = "color: black; margin-left: 15px; margin-bottom: 5px;"),
-
-  # hover text
-  tippy::tippy(
-    "<br/>&#9432;",
-    "<div class = \"largerfont\"> Filename <em>must</em> include \".csv\" so that the file can be opened 
-                                  by your machine, and its associated spreadsheet software. </div>"
-  ),
-  width = "350px"
+  data.step = 9,
+  data.intro = "Click here to download your search results as a CSV. Make sure that you include .csv in your file name!")
+,
+ data.step = 1,
+ data.intro = "The sidebar contains the controls for changing what terms are searched for, where it's searched for, and how its visualized.<br><br> Let's see what we can do!"
+),
+width = "350px"
 )
 
 # Body ------------------------------------------------------------------------------------------------------------
 body <- dashboardBody(
-
+  shinyjs::useShinyjs(),
+  introjsUI(),
   tags$head(
     tags$link(rel = "stylesheet", type = "text/css", href = "trends_in_IO_style.css")
   ),

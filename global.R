@@ -7,6 +7,7 @@ library(plotly)
 library(knitr)
 library(vroom)
 library(shinydashboard)
+library(rintrojs)
 
 # import data
 master <- readRDS("my_environ.Rdata")

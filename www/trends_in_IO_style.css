@@ -61,6 +61,7 @@ p {font-size: 18px;}
 
 .irs-min, .irs-max, .irs-from, .irs-to{
   background: 	#a8605c;
+  color: white;
 }
 
 .shiny-output-error { visibility: hidden; }
@@ -101,7 +102,33 @@ p {font-size: 18px;}
     transform: translate3d(0, 0, 0);
 }
 
-.btn2:hover, .btn2:active, .btn2:visited {
+.btn3 {
+    font-size: 1em;
+    text-align: left;
+    color: white;
+    background: #222d32;
+    border-radius: 0;
+    border-color: transparent;
+    box-shadow: 0 2px 5px 0 rgba(0,0,0,0.18), 0 1px 5px 0 rgba(0,0,0,0.15);
+    text-transform: uppercase;
+    -webkit-transition: all 0.25s cubic-bezier(0.02, 0.01, 0.47, 1);
+    -moz-transition: all 0.25s cubic-bezier(0.02, 0.01, 0.47, 1);
+    -o-transition: all 0.25s cubic-bezier(0.02, 0.01, 0.47, 1);
+    transition: all 0.25s cubic-bezier(0.02, 0.01, 0.47, 1);
+    -webkit-transform: translate3d(0, 0, 0);
+    -moz-transform: translate3d(0, 0, 0);
+    -ms-transform: translate3d(0, 0, 0);
+    -o-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    display: inline-block;
+    margin-bottom: 0;
+    font-weight: 400;
+    white-space: nowrap;
+    vertical-align: middle;
+    padding:10px;
+}
+
+.btn2:hover, .btn2:active, .btn3:hover, .btn3:active {
     background: #a8605c;
     color: white;
 }
@@ -114,4 +141,9 @@ p {font-size: 18px;}
 .centerdiv {
   width: 100%;
   margin: auto;
+}
+
+.skin-purple .main-header .logo {
+  font-size: 1.5em;
+  font-weight: 800;
 }

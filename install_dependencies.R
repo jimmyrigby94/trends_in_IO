@@ -30,6 +30,10 @@ if(!require(DT)){
   install.packages('DT')
 }
 
+if(!require(rintrojs)){
+  install.packages("rintrojs")
+}
+
 library(shiny)
 library(shinyBS)
 library(tidyverse)
@@ -38,3 +42,4 @@ library(plotly)
 library(knitr)
 library(vroom)
 library(shinydashboard)
+library(rintrojs)
