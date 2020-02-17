@@ -1,4 +1,6 @@
-h2 { text-align: left; }
+h2 { text-align: left; 
+}
+
 
 .multicol {
 
@@ -78,7 +80,7 @@ p {font-size: 18px;}
 */
   
 .btn2 {
-    font-size: 2em;
+    font-size: 1.5em;
     padding-left: 5%;
     padding-right: 5%;
     margin-left: 30px;
@@ -136,6 +138,10 @@ p {font-size: 18px;}
 .skin-purple .sidebar-menu>li.active>a, .skin-purple .sidebar-menu>li:hover>a {
   background: #222d32;
   border-left-color: #222d32;
+}
+
+.skin-purple .sidebar a {
+margin-left: 5%;
 }
 
 .centerdiv {
