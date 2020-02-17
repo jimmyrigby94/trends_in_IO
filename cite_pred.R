@@ -16,14 +16,17 @@ cite_pred <- function(data) {
           ungroup() %>%
           mutate(term = if_else(term == "(Intercept)", "Terms Not Present", "Terms Present")) %>%
           mutate_if(.predicate = is.numeric, funs(round), digits = 2)
+  
 
-  temp2 <- left_join(temp %>% filter(term != "Terms Not Present") %>% select(-term),
-                     temp %>% filter(term == "Terms Not Present") %>%
-                       select(decade, estimate) %>% rename(Mean = estimate)) %>%
+
+  temp2 <- left_join(temp %>% filter(term == "Terms Not Present") %>%
+                       select(decade, estimate) %>% rename(Mean = estimate),
+                     temp %>% filter(term != "Terms Not Present") %>% select(-term)) %>%
                        mutate(`Estimate With` = round(exp(Mean + estimate),2), `Estimate Without` = round(exp(Mean),2)) %>%
                        select(Decade = decade, `Estimate Without`, `Estimate With`, Effect = estimate,
                               `Standard Error` = std.error, `t` = statistic, `p` = p.value) %>%
                        arrange(Decade)%>%
+    mutate(`Estimate With` = if_else(is.na(`Estimate With`), "Not Enough Information", as.character(`Estimate With`)))%>%
     as.data.frame(.)
   
   temp2
