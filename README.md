@@ -69,10 +69,9 @@ runApp()
 
 ## What’s New?
 
-  - Significant speed imporvements
-  - reorganization of internals
-  - Action button for creating new search
-  - Correcting a few typos and formatting errors
+  - Updated and simplified UI
+  - Added intro.js Tutorial
+  - Made cite-pred robust to null search results
 
 ## Future Improvements
 
@@ -86,11 +85,18 @@ runApp()
 
 ![Overview](supl/dashboard.PNG)
 
-![Instructions](supl/search_results.png)
+![Results](supl/search_results.png)
 
-![Trend by Publication Outlet](supl/journal%20selection.png)
+![Trend by Publication Outlet](supl/journal_selection.png)
 
 ## Old Change Logs
+
+### January 2020
+
+  - Significant speed imporvements
+  - Reorganization of internals
+  - Action button for new search
+  - Correcting a few errors
 
 ### October 2019
 

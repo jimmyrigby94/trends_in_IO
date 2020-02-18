@@ -43,9 +43,10 @@ runApp()
 ```
 
 ## What's New? 
-- Updated and simplified UI
-- Added intro.js Tutorial
-- Made cite-pred robust to null search results
+- Updated and simplified UI.
+- Added intro.js Tutorial.
+- Made cite-pred robust to null search results.
+- Corrected errors.
 
 
 ## Future Improvements
@@ -58,9 +59,9 @@ runApp()
 
 ![Overview](supl/dashboard.PNG)
 
-![Instructions](supl/search_results.png)
+![Results](supl/search_results.png)
 
-![Trend by Publication Outlet](supl/journal selection.png)
+![Trend by Publication Outlet](supl/journal_selection.png)
 
 
 
