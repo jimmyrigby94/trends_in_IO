@@ -1,7 +1,69 @@
 # header --------------------------------------------------------------------------------------------------------------------------------------------
 header <- dashboardHeader(title = "Trends in I-O Psychology",
                           titleWidth  = "350px",
-                          tags$li(actionButton("launchhelp", "Help", icon("question"),  style = "color: white; background:transparent; border:none; margin-top: 12%;"), class = "dropdown"))
+                          tags$li(
+                            introBox(
+
+                                  introBox(
+                                    tags$a(
+                                      tags$i(class = "fa fa-chart-line"),
+                                      "Dashboard",
+                                      class = "btn2",
+                                      onclick = "openTab('plts_and_analytics')",
+                                      href = "#shiny-tab-plts_and_analytics",
+                                      `data-value` = "plts_and_analytics",
+                                      `data-toggle` = "tab"
+                                    ),
+                                    data.step = 11,
+                                    data.intro = "Click here to navigate to the main dashboard."
+                                  ),
+                                  introBox(
+                                    tags$a(
+                                      tags$i(class = "fa fa-table"),
+                                      "Search Results",
+                                      class = "btn2",
+                                      onclick = "openTab('searchresults')",
+                                      href = "#shiny-tab-searchresults",
+                                      `data-value` = "searchresults",
+                                      `data-toggle` = "tab"
+                                    ),
+                                    data.step = 12,
+                                    data.intro = "Click here to see a table of the search results. The table includes the article title, meta-information such as the doi, and the number of terms in the article that match the user's search."
+                                  ),
+
+                                  introBox(
+                                    tags$a(
+                                      tags$i(class = "fa fa-signal"),
+                                      "Database Coverage",
+                                      class = "btn2",
+                                      onclick = "openTab('database_coverage')",
+                                      href = "#shiny-tab-database_coverage",
+                                      `data-value` = "database_coverage",
+                                      `data-toggle` = "tab"
+                                    ),
+                                    data.step = 13,
+                                    data.intro = "Click here to explore the number of articles for each journal in our data base."
+                                  ),
+                                  introBox(
+                                    tags$a(
+                                      tags$i(class = "fas fa-info-circle"),
+                                      "About",
+                                      class = "btn2",
+                                      onclick = "openTab('about')",
+                                      href = "#shiny-tab-about",
+                                      `data-value` = "about",
+                                      `data-toggle` = "tab"
+                                    ),
+                                    data.step = 14,
+                                    data.intro = "Click here to learn more about the app and authors."
+                                  ),
+                              data.step = 10,
+                              data.intro = "You can navigate to different portions of the app using these buttons."),
+                            actionButton("launchhelp", "Help", icon("question"),  style = "color: white; background:transparent; border:none; float:right;"),
+                            class = "dropdown",
+                            style = "width:100%; margin-top: 10px;height:100%;"
+                          )
+                          )
 
 # sidebar ----------------------------------------------------------------------------------------------------------------------------------------
 sidebar <- dashboardSidebar(
@@ -148,74 +210,7 @@ body <- dashboardBody(
     tags$link(rel = "stylesheet", type = "text/css", href = "trends_in_IO_style.css")
     
   ),
-  introBox(
-    tags$table(tags$tr(
-      tags$td(
-        introBox(
-          tags$a(
-            tags$i(class = "fa fa-chart-line"),
-            "Dashboard",
-            class = "btn2",
-            onclick = "openTab('plts_and_analytics')",
-            href = "#shiny-tab-plts_and_analytics",
-            `data-value` = "plts_and_analytics",
-            `data-toggle` = "tab"
-          ),
-          data.step = 11,
-          data.intro = "Click here to navigate to the main dashboard."
-        )
-      ),
-      tags$td(
-        introBox(
-          tags$a(
-            tags$i(class = "fa fa-table"),
-            "Search Results",
-            class = "btn2",
-            onclick = "openTab('searchresults')",
-            href = "#shiny-tab-searchresults",
-            `data-value` = "searchresults",
-            `data-toggle` = "tab"
-          ),
-          data.step = 12,
-          data.intro = "Click here to see a table of the search results. The table includes the article title, meta-information such as the doi, and the number of terms in the article that match the user's search."
-        )
-      ),
-      tags$td(
-        introBox(
-          tags$a(
-            tags$i(class = "fa fa-signal"),
-            "Database Coverage",
-            class = "btn2",
-            onclick = "openTab('database_coverage')",
-            href = "#shiny-tab-database_coverage",
-            `data-value` = "database_coverage",
-            `data-toggle` = "tab"
-          ),
-          data.step = 13,
-          data.intro = "Click here to explore the number of articles for each journal in our data base."
-        )
-      ),
-      tags$td(
-        introBox(
-          tags$a(
-            tags$i(class = "fa fa-question"),
-            "About",
-            class = "btn2",
-            onclick = "openTab('about')",
-            href = "#shiny-tab-about",
-            `data-value` = "about",
-            `data-toggle` = "tab"
-          ),
-          data.step = 14,
-          data.intro = "Click here to learn more about the app and authors."
-        )
-      )
-    ),
-    style = "margin-bottom: 15px; width: 100%;"),
-    data.step = 10,
-    data.intro = "You can navigate to different portions of the app using these buttons."
-  ),
-  
+
   tabItems(
     tabItem(tabName = "plts_and_analytics",
             fluidRow(
@@ -239,7 +234,8 @@ body <- dashboardBody(
                   width = 6,
                   DT::DTOutput("citetest")),
               data.step = 17,
-              data.intro = "This box tests for mean differences in citation rates between articles that match the user's query and those that do not. Models are run by decade to account for potential non-linear interactions between time and the topic. <br><br> \"Estimate With\" reports the predicted number of citations for an article that contains the search term. In contrast, \"Estimate Without\" contains the predicted number of citations for an article that does not match the user search. <br><br> \"Estimate\" and \"SE\" report the estimated regression coefficient for a dummy-coded variable indicating a match. <br><br> Finally, the columns t and p report the hypotheses test testing the null that the regression coefficient differs from 0.")
+              data.intro = "This box tests for mean differences in citation rates between articles that match the user's query and those that do not. Models are run by decade to account for potential non-linear interactions between time and the topic. <br><br> \"Estimate With\" reports the predicted number of citations for an article that contains the search term. In contrast, \"Estimate Without\" contains the predicted number of citations for an article that does not match the user search. <br><br> \"Estimate\" and \"SE\" report the estimated regression coefficient for a dummy-coded variable indicating a match. <br><br> Finally, the columns t and p report the hypotheses test testing the null that the regression coefficient differs from 0.",
+              data.position = "right")
             )
           ),
     tabItem(

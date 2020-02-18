@@ -80,18 +80,19 @@ p {font-size: 18px;}
 */
   
 .btn2 {
+    float:left;
+    height:100%;
     font-size: 1.5em;
     padding-left: 5%;
     padding-right: 5%;
-    margin-left: 30px;
-    margin-right: 30px;
+    margin-left: 0;
+    margin-right: 0;
     text-align: left;
     color: white;
-    background: #222d32;
+    background: #605ca8;
     text-indent: 4px;
     border-radius: 0;
     border-color: transparent;
-    box-shadow: 0 2px 5px 0 rgba(0,0,0,0.18), 0 1px 5px 0 rgba(0,0,0,0.15);
     text-transform: uppercase;
     -webkit-transition: all 0.25s cubic-bezier(0.02, 0.01, 0.47, 1);
     -moz-transition: all 0.25s cubic-bezier(0.02, 0.01, 0.47, 1);
@@ -154,7 +155,8 @@ margin-left: 5%;
   font-weight: 800;
 }
 
-.help {
-  background: transparent !important;
-  color: white;
+
+.navbar-custom-menu, .nav.navbar-nav, .dropdown{
+  width:95%;
+  height:100%;
 }
