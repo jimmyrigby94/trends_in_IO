@@ -113,6 +113,15 @@ showModal(modal_output)
   }
   )
   
+  observeEvent(input$launchhelp,{
+    introjs(session, options = list("nextLabel" = "Next",
+                                    "prevLabel" = "Previous",
+                                    "doneLabel" = "I'm Done",
+                                    showStepNumbers = "false"))
+
+  }
+  )
+  
   # handler for select all and deselect all
   # one observe context for deselect
   i <- 0

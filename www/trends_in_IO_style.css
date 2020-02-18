@@ -153,3 +153,8 @@ margin-left: 5%;
   font-size: 1.5em;
   font-weight: 800;
 }
+
+.help {
+  background: transparent !important;
+  color: white;
+}

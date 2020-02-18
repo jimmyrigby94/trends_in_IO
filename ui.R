@@ -1,6 +1,7 @@
 # header --------------------------------------------------------------------------------------------------------------------------------------------
 header <- dashboardHeader(title = "Trends in I-O Psychology",
-                          titleWidth  = "350px")
+                          titleWidth  = "350px",
+                          tags$li(actionButton("launchhelp", "Help", icon("question"),  style = "color: white; background:transparent; border:none; margin-top: 12%;"), class = "dropdown"))
 
 # sidebar ----------------------------------------------------------------------------------------------------------------------------------------
 sidebar <- dashboardSidebar(
