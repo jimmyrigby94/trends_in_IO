@@ -43,10 +43,9 @@ runApp()
 ```
 
 ## What's New? 
-- Significant speed imporvements
-- reorganization of internals
-- Action but for new search
-- Correcting a few errors
+- Updated and simplified UI
+- Added intro.js Tutorial
+- Made cite-pred robust to null search results
 
 
 ## Future Improvements
@@ -66,6 +65,11 @@ runApp()
 
 
 ## Old Change Logs
+### January 2020
+- Significant speed imporvements
+- Reorganization of internals
+- Action button for new search
+- Correcting a few errors
 
 ### October 2019
 

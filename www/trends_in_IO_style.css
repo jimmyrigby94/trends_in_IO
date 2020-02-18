@@ -130,9 +130,9 @@ p {font-size: 18px;}
     padding:10px;
 }
 
-.btn2:hover, .btn2:active, .btn3:hover, .btn3:active {
+.btn2:hover, .btn2:active, .btn3:hover, .btn3:active .btn2:link, .btn3:link, .btn2:active, .btn3:active {
     background: #a8605c;
-    color: white;
+    color: white !important;
 }
 
 .skin-purple .sidebar-menu>li.active>a, .skin-purple .sidebar-menu>li:hover>a {

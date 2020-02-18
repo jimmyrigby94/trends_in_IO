@@ -41,20 +41,20 @@ sidebar <- dashboardSidebar(
             value = 1
           ),
           data.step = 4,
-          data.intro = "Sometimes an article may match your search by chance. You can increase the number of matching terms required to be included in your search results. This can reduce the number of false pasitives (Type I errors)"
+          data.intro = "Sometimes an article may match your search by chance. You can increase the number of matching terms required to be included in your search results. This can reduce the number of false positives (Type I errors)."
         ),
         tags$br(),
         introBox(
           sliderInput(
             inputId = "yearrange",
-            label = "Published After",
+            label = "Published Betweeen",
             min = 1930,
             max = 2019,
             value = c(1930, 2019),
             sep = ""
           ),
           data.step = 5,
-          data.intro = "Use the slider to restrict your search to a certain date range."
+          data.intro = "Use the slider to restrict your search to a certain date range. End years are inclusive."
         ),
         tags$br(),
         introBox(
@@ -79,7 +79,7 @@ sidebar <- dashboardSidebar(
           ),
           
           data.step = 7,
-          data.intro = "Select \"yes\" if you are interested in plotting the proportion of articles matching your search on the y-axis. Select \"no\" if you want to plot the raw frequencies. <br><br> Note that proportions are based on SCOPUS database coverage.  Weak coverage will invariably result in
+          data.intro = "Select \"Yes\" if you are interested in plotting the proportion of articles matching your search on the y-axis. Select \"No\" if you want to plot the raw frequencies. <br><br> Note that proportions are based on SCOPUS database coverage.  Weak coverage will invariably result in
           inaccurate proportion estimates, and earlier dates have notably weaker coverage."
         ),
         
@@ -93,27 +93,33 @@ sidebar <- dashboardSidebar(
           data.step = 8,
           data.intro = "If you want to plot journals separately select \"Yes\" otherwise select \"No\"."
         ),
-        
+        # download button
+        introBox(
+          downloadButton(
+            'my_trends',
+            'Download .CSV',
+            icon = icon("download"),
+            style = "color: black; margin-left: 15px; margin-bottom: 5px;"
+          ),
+          data.step = 9,
+          data.intro = "Click here to download your search results as a CSV."
+        ),
         
         menuItem("",
                  tabName = "plts_and_analytics",
                  selected = TRUE),
+        menuItem("",
+                 tabName = "about",
+                 selected = FALSE),
+        menuItem("",
+                 tabName = "searchresults",
+                 selected = FALSE),
+        menuItem("",
+                 tabName = "database_coverage",
+                 selected = FALSE),
         style = "font-size: 1.5em; margin-left: 2.5%;"
         )
     ),
-    
-    # download button
-    introBox(
-      downloadButton(
-        'my_trends',
-        'Download .CSV',
-        icon = icon("download"),
-        style = "color: black; margin-left: 15px; margin-bottom: 5px;"
-      ),
-      data.step = 9,
-      data.intro = "Click here to download your search results as a CSV. Make sure that you include .csv in your file name!"
-    )
-    ,
     data.step = 1,
     data.intro = "The sidebar contains the controls for changing what terms are searched for, where it's searched for, and how its visualized.<br><br> Let's see what we can do!"
 ),
@@ -122,10 +128,24 @@ width = "350px"
 
 # Body ------------------------------------------------------------------------------------------------------------
 body <- dashboardBody(
+  
+  # Defining JS helpers
   shinyjs::useShinyjs(),
   introjsUI(),
+  # Including JS to set tab to open
+  tags$script(HTML("
+        var openTab = function(tabName){
+          $('a', $('.sidebar')).each(function() {
+            if(this.getAttribute('data-value') == tabName) {
+              this.click()
+            };
+          });
+        }
+      ")),
+  # loading CSS
   tags$head(
     tags$link(rel = "stylesheet", type = "text/css", href = "trends_in_IO_style.css")
+    
   ),
   introBox(
     tags$table(tags$tr(
@@ -135,12 +155,13 @@ body <- dashboardBody(
             tags$i(class = "fa fa-chart-line"),
             "Dashboard",
             class = "btn2",
+            onclick = "openTab('plts_and_analytics')",
             href = "#shiny-tab-plts_and_analytics",
             `data-value` = "plts_and_analytics",
             `data-toggle` = "tab"
           ),
           data.step = 11,
-          data.intro = "Click here to return to navigate to the main dashboard."
+          data.intro = "Click here to navigate to the main dashboard."
         )
       ),
       tags$td(
@@ -149,12 +170,13 @@ body <- dashboardBody(
             tags$i(class = "fa fa-table"),
             "Search Results",
             class = "btn2",
+            onclick = "openTab('searchresults')",
             href = "#shiny-tab-searchresults",
             `data-value` = "searchresults",
             `data-toggle` = "tab"
           ),
           data.step = 12,
-          data.intro = "Click here to see a table of the search results. The table includes the article title, meta-information, and the number of matching terms."
+          data.intro = "Click here to see a table of the search results. The table includes the article title, meta-information such as the doi, and the number of terms in the article that match the user's search."
         )
       ),
       tags$td(
@@ -163,6 +185,7 @@ body <- dashboardBody(
             tags$i(class = "fa fa-signal"),
             "Database Coverage",
             class = "btn2",
+            onclick = "openTab('database_coverage')",
             href = "#shiny-tab-database_coverage",
             `data-value` = "database_coverage",
             `data-toggle` = "tab"
@@ -177,6 +200,7 @@ body <- dashboardBody(
             tags$i(class = "fa fa-question"),
             "About",
             class = "btn2",
+            onclick = "openTab('about')",
             href = "#shiny-tab-about",
             `data-value` = "about",
             `data-toggle` = "tab"
@@ -194,18 +218,29 @@ body <- dashboardBody(
   tabItems(
     tabItem(tabName = "plts_and_analytics",
             fluidRow(
+              introBox(
               box(title = "Publication Trends for User-Specified Query",
                   width = 12,
-                  plotlyOutput("plot1"))
+                  plotlyOutput("plot1")),
+              data.step = 15,
+              data.intro = "This box displays a plot of the proportion of articles that match the user's query. <br><br> This plot, along with all others in this app, are interactive. Hovering over the plot provides more information about the data point. Clicking on the camera button in the top right of the plot exports the image as a .png. If you zoom in or pan, you can return to the default view by double clicking on the plot.")
             ),
             fluidRow(
+              introBox(
               box(title = "Citation Trends for User-Specified Query",
                   width = 6,
                   plotlyOutput("plot2")),
+              data.step = 16,
+              data.intro = "This box displays the citation trends for articles matching the user's search (black) and those that don't match the user's search (red)."
+              ),
+              introBox(
               box(title = "Do People Cite the User-Specified Query More Than Other Articles?",
                   width = 6,
-                  DT::DTOutput("citetest"))
-            )),
+                  DT::DTOutput("citetest")),
+              data.step = 17,
+              data.intro = "This box tests for mean differences in citation rates between articles that match the user's query and those that do not. Models are run by decade to account for potential non-linear interactions between time and the topic. <br><br> \"Estimate With\" reports the predicted number of citations for an article that contains the search term. In contrast, \"Estimate Without\" contains the predicted number of citations for an article that does not match the user search. <br><br> \"Estimate\" and \"SE\" report the estimated regression coefficient for a dummy-coded variable indicating a match. <br><br> Finally, the columns t and p report the hypotheses test testing the null that the regression coefficient differs from 0.")
+            )
+          ),
     tabItem(
       tabName =  "searchresults",
       box(
