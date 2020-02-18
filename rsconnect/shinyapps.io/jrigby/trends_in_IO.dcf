@@ -5,9 +5,9 @@ account: jrigby
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 362221
-bundleId: 2807933
+bundleId: 2808061
 url: https://jrigby.shinyapps.io/Trends_in_IO/
-when: 1581992017.76973
+when: 1581997619.67873
 asMultiple: FALSE
 asStatic: FALSE
-ignoredFiles: command.txt|master.feather|R|README.md|README.Rmd|supl
+ignoredFiles: command.txt|master.feather|R|README.md|README.Rmd
