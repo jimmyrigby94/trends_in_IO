@@ -251,7 +251,7 @@ body <- dashboardBody(
   # Defining JS helpers
   shinyjs::useShinyjs(),
   introjsUI(),
-  # Including JS to set tab to open
+  # Including JS to set tab to open when clicking navbar buttons
   tags$script(HTML("
         var openTab = function(tabName){
           $('a', $('.sidebar')).each(function() {
@@ -273,7 +273,8 @@ body <- dashboardBody(
               introBox(
               box(title = "Publication Trends for User-Specified Query",
                   width = 12,
-                  plotlyOutput("plot1")),
+                  plotlyOutput("plot1")%>%
+                    withSpinner(color="#a8605c")),
               data.step = 15,
               data.intro = "This box displays a plot of the proportion of articles that match the user's query. <br><br> This plot, along with all others in this app, are interactive. Hovering over the plot provides more information about the data point. Clicking on the camera button in the top right of the plot exports the image as a .png. If you zoom in or pan, you can return to the default view by double clicking on the plot.")
             ),
@@ -281,14 +282,16 @@ body <- dashboardBody(
               introBox(
               box(title = "Citation Trends for User-Specified Query",
                   width = 6,
-                  plotlyOutput("plot2")),
+                  plotlyOutput("plot2")%>%
+                    withSpinner(color="#a8605c")),
               data.step = 16,
               data.intro = "This box displays the citation trends for articles matching the user's search (black) and those that don't match the user's search (red)."
               ),
               introBox(
               box(title = "Do People Cite the User-Specified Query More Than Other Articles?",
                   width = 6,
-                  DT::DTOutput("citetest")),
+                  DT::DTOutput("citetest")%>%
+                    withSpinner(color="#a8605c")),
               data.step = 17,
               data.intro = "This box tests for mean differences in citation rates between articles that match the user's query and those that do not. Models are run by decade to account for potential non-linear interactions between time and the topic. <br><br> \"Estimate With\" reports the predicted number of citations for an article that contains the search term. In contrast, \"Estimate Without\" contains the predicted number of citations for an article that does not match the user search. <br><br> \"Estimate\" and \"SE\" report the estimated regression coefficient for a dummy-coded variable indicating a match. <br><br> Finally, the columns t and p report the hypotheses test testing the null that the regression coefficient differs from 0.",
               data.position = "right")
@@ -300,7 +303,8 @@ body <- dashboardBody(
         title = "Search Results",
         width = "100%",
         height = "100%",
-        DT::DTOutput("table")
+        DT::DTOutput("table")%>%
+          withSpinner(color="#a8605c")
       )
     ),
     tabItem(
@@ -309,7 +313,8 @@ body <- dashboardBody(
         title = "Database Coverage",
         width = "100%",
         height = "100%",
-        plotlyOutput(outputId = "coverage")
+        plotlyOutput(outputId = "coverage")%>%
+          withSpinner(color="#a8605c")
       )
     ),
     tabItem(tabName = "journal_selection",

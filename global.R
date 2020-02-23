@@ -1,13 +1,12 @@
 # helper
 library(shiny)
-library(shinyBS)
 library(tidyverse)
 library(tidytext)
 library(plotly)
 library(knitr)
-library(vroom)
 library(shinydashboard)
 library(rintrojs)
+library(shinycssloaders)
 
 # import dependencies
 source("tidy_trend_plot.R")

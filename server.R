@@ -131,7 +131,14 @@ observeEvent(c(input$tutorial, input$launchhelp, input$launchhelp2),{
   introjs(session, options = list("nextLabel" = "Next",
                                   "prevLabel" = "Previous",
                                   "doneLabel" = "I'm Done",
-                                  showStepNumbers = "false"))
+                                  showStepNumbers = "false"),
+          events = list("onchange" = I(
+             "if (this._currentStep==0) {
+        $('a[data-value!=\"plts_and_analytics\"]').removeClass('active');
+        $('a[data-value=\"plts_and_analytics\"]').addClass('active');
+        $('a[data-value=\"plts_and_analytics\"]').trigger('click');
+  }")
+          ))
 
 })
   
