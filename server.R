@@ -11,7 +11,7 @@ modal_output<-modalDialog(
                           size = "l",
                           fade = TRUE,
                           footer = tagList(
-                            tags$a(tags$i(class = "fab fa-github"), "Github", class="btn3", style = "margin-right: 5px;", href = "https://github.com/jimmyrigby94/trends_in_IO", target="_blank"),
+                            tags$a(tags$i(class = "fab fa-github"), "Github", class="btn3", style = "margin-right: 1%;", href = "https://github.com/jimmyrigby94/trends_in_IO", target="_blank"),
                             actionButton("tutorial",
                                          "Begin the Tutorial",
                                          icon = icon("graduation-cap"),
@@ -121,6 +121,14 @@ showModal(modal_output)
 
   }
   )
+  
+  observeEvent(input$launchhelp2,{
+    introjs(session, options = list("nextLabel" = "Next",
+                                    "prevLabel" = "Previous",
+                                    "doneLabel" = "I'm Done",
+                                    showStepNumbers = "false"))
+    
+  })
   
   # handler for select all and deselect all
   # one observe context for deselect

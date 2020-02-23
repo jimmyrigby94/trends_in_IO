@@ -82,13 +82,15 @@ p {font-size: 18px;}
 .btn2 {
     float:left;
     height:100%;
-    font-size: 1.5em;
-    padding-left: 25px;
-    padding-right: 25px;
+    font-size: 150%;
+    padding-left: 1%;
+    padding-right: 1%;
+    width:20%;
+    overflow:hidden;
     margin-left: 0;
     margin-right: 0;
     text-align: left;
-    color: white;
+    color: white !important;
     background: #605ca8;
     text-indent: 4px;
     border-radius: 0;
@@ -106,7 +108,7 @@ p {font-size: 18px;}
 }
 
 .btn3 {
-    font-size: 1em;
+    font-size: 100%;
     text-align: left;
     color: white;
     background: #222d32;
@@ -128,7 +130,7 @@ p {font-size: 18px;}
     font-weight: 400;
     white-space: nowrap;
     vertical-align: middle;
-    padding:10px;
+    padding:1%;
 }
 
 .btn2:hover, .btn2:active, .btn3:hover, .btn3:active .btn2:link, .btn3:link, .btn2:active, .btn3:active {
@@ -157,6 +159,19 @@ margin-left: 5%;
 
 
 .navbar-custom-menu, .nav.navbar-nav, .dropdown{
-  width:95%;
+  width:90%;
   height:100%;
 }
+
+.mobile_nav {
+        display: none;
+    }
+
+
+@media only screen and (max-width: 1100px) {
+        .mobile_nav{display: block;}       
+        .desktop_nav {display: none;}
+        .navbar-custom-menu, .nav.navbar-nav{
+          width:85%;
+        }
+    } 

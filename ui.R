@@ -3,8 +3,8 @@ header <- dashboardHeader(title = "Trends in I-O Psychology",
                           titleWidth  = "350px",
                           tags$li(
                             introBox(
-
                                   introBox(
+                                    tags$div(
                                     tags$a(
                                       tags$i(class = "fa fa-chart-line"),
                                       "Dashboard",
@@ -14,37 +14,75 @@ header <- dashboardHeader(title = "Trends in I-O Psychology",
                                       `data-value` = "plts_and_analytics",
                                       `data-toggle` = "tab"
                                     ),
+                                    class = "desktop_nav"
+                                    ),
+                                    tags$div(
+                                      tags$a(
+                                        tags$i(class = "fa fa-chart-line"),
+                                        class = "btn2",
+                                        onclick = "openTab('plts_and_analytics')",
+                                        href = "#shiny-tab-plts_and_analytics",
+                                        `data-value` = "plts_and_analytics",
+                                        `data-toggle` = "tab"
+                                      ),
+                                      class = "mobile_nav"
+                                    ),
                                     data.step = 11,
                                     data.intro = "Click here to navigate to the main dashboard."
                                   ),
                                   introBox(
+                                    tags$div(
                                     tags$a(
                                       tags$i(class = "fa fa-table"),
-                                      "Search Results",
+                                      "Results",
                                       class = "btn2",
                                       onclick = "openTab('searchresults')",
                                       href = "#shiny-tab-searchresults",
                                       `data-value` = "searchresults",
                                       `data-toggle` = "tab"
                                     ),
+                                    class = "desktop_nav"),
+                                    tags$div(
+                                      tags$a(
+                                        tags$i(class = "fa fa-table"),
+                                        class = "btn2",
+                                        onclick = "openTab('searchresults')",
+                                        href = "#shiny-tab-searchresults",
+                                        `data-value` = "searchresults",
+                                        `data-toggle` = "tab"
+                                      ),
+                                      class = "mobile_nav"),
                                     data.step = 12,
                                     data.intro = "Click here to see a table of the search results. The table includes the article title, meta-information such as the doi, and the number of terms in the article that match the user's search."
                                   ),
 
                                   introBox(
+                                    tags$div(
                                     tags$a(
                                       tags$i(class = "fa fa-signal"),
-                                      "Database Coverage",
+                                      "Database",
                                       class = "btn2",
                                       onclick = "openTab('database_coverage')",
                                       href = "#shiny-tab-database_coverage",
                                       `data-value` = "database_coverage",
                                       `data-toggle` = "tab"
                                     ),
+                                    class = "desktop_nav"),
+                                    tags$div(
+                                      tags$a(
+                                        tags$i(class = "fa fa-signal"),
+                                        class = "btn2",
+                                        onclick = "openTab('database_coverage')",
+                                        href = "#shiny-tab-database_coverage",
+                                        `data-value` = "database_coverage",
+                                        `data-toggle` = "tab"
+                                      ),
+                                      class = "mobile_nav"),
                                     data.step = 13,
                                     data.intro = "Click here to explore the number of articles for each journal in our data base."
                                   ),
                                   introBox(
+                                    tags$div(
                                     tags$a(
                                       tags$i(class = "fas fa-info-circle"),
                                       "About",
@@ -54,12 +92,30 @@ header <- dashboardHeader(title = "Trends in I-O Psychology",
                                       `data-value` = "about",
                                       `data-toggle` = "tab"
                                     ),
+                                    class = "desktop_nav"),
+                                    tags$div(
+                                      tags$a(
+                                        tags$i(class = "fas fa-info-circle"),
+                                        class = "btn2",
+                                        onclick = "openTab('about')",
+                                        href = "#shiny-tab-about",
+                                        `data-value` = "about",
+                                        `data-toggle` = "tab"
+                                      ),
+                                      class = "mobile_nav"),
                                     data.step = 14,
                                     data.intro = "Click here to learn more about the app and authors."
                                   ),
                               data.step = 10,
                               data.intro = "You can navigate to different portions of the app using these buttons."),
-                            actionButton("launchhelp", "Help", icon("question"),  style = "color: white; background:transparent; border:none; float:right;"),
+                            tags$div(
+                              actionButton("launchhelp", "Help", icon("question"), class = "btn2"),
+                              class = "desktop_nav"
+                            ),
+                            tags$div(
+                              actionButton("launchhelp2", "", icon("question"), class = "btn2", style = "position:absolute; top:0;"),
+                              class = "mobile_nav"
+                            ),
                             class = "dropdown",
                             style = "width:100%; margin-top: 10px;height:100%;"
                           )
