@@ -24,6 +24,7 @@ modal_output<-modalDialog(
 
 showModal(modal_output)
 
+
 # Preporatory Reactive Environments ---------------------------------------
   
   # parses the user-specified query
@@ -34,6 +35,18 @@ showModal(modal_output)
   
 
   search_data<-  eventReactive(input$plot, {
+    
+    # Handle new loading
+    test_journals<-!input$journal %in% init_selected
+    
+    if(any(test_journals)){
+      new_journals<-input$journal[test_journals]
+      
+      master<-bind_rows(master, map_dfr(new_journals, ~read_rds(paste0("data/", ., ".rds"))))
+      
+      init_selected<- c(init_selected, new_journals)
+    }
+    
     search_abstract(data = master[master$`Source title` %in% input$journal,],
                     unigram = prepped_unigram(),
                     threshhold = input$cutoff,

@@ -9,9 +9,6 @@ library(vroom)
 library(shinydashboard)
 library(rintrojs)
 
-# import data
-master <- readRDS("my_environ.Rdata")
-
 # import dependencies
 source("tidy_trend_plot.R")
 source("cite_pred.R")
@@ -22,6 +19,25 @@ source("prep_unigram.R")
 source("search_abstract.R")
 source("cited_by_models.R")
 
+init_selected<-c(
+  "Journal of Applied Psychology",
+  "Personnel Psychology",
+  "Academy of Management Journal",
+  "Journal of Management",
+  "Journal of Occupational and Organizational Psychology",
+  "International Journal of Selection and Assessment",
+  "Organizational Behavior and Human Decision Processes",
+  "Journal of Vocational Behavior",
+  "Academy of Management Review",
+  "Psychological Bulletin",
+  "Human Performance",
+  "American Psychologist",
+  "Journal of Business and Psychology",
+  "Leadership Quarterly",
+  "Journal of Applied Social Psychology",
+  "Journal of Occupational Health Psychology",
+  "Applied Psychology"
+)
 # defines journal names for the named vector in order to reduce repeating code
 j_names <- c(
   "Academy of Management Executive" = "Academy of Management Executive",
@@ -109,4 +125,10 @@ j_names <- c(
   "The International Journal of Human Resource Management" = "The International Journal of Human Resource Management",
   "The Personnel Administrator" = "The Personnel Administrator",
   "Work and Stress" = "Work and Stress"
+)
+
+# Reading in Initial Data Files
+master<-map_dfr(init_selected, function(x){
+  read_rds(paste0("data/", x, ".rds"))
+}
 )

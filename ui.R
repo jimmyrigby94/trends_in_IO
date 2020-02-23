@@ -322,25 +322,7 @@ body <- dashboardBody(
                   "journal",
                   label = NULL,
                   j_names,
-                  selected = c(
-                    "Journal of Applied Psychology",
-                    "Personnel Psychology",
-                    "Academy of Management Journal",
-                    "Journal of Management",
-                    "Journal of Occupational and Organizational Psychology",
-                    "International Journal of Selection and Assessment",
-                    "Organizational Behavior and Human Decision Processes",
-                    "Journal of Vocational Behavior",
-                    "Academy of Management Review",
-                    "Psychological Bulletin",
-                    "Human Performance",
-                    "American Psychologist",
-                    "Journal of Business and Psychology",
-                    "Leadership Quarterly",
-                    "Journal of Applied Social Psychology",
-                    "Journal of Occupational Health Psychology",
-                    "Applied Psychology"
-                  )
+                  selected = init_selected
                 ),
                 br(),
                 actionButton("selectall", label = "Select All"),
