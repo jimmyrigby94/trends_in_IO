@@ -83,6 +83,8 @@ p {font-size: 18px;}
     float:left;
     height:100%;
     font-size: 150%;
+    padding-top:0;
+    padding-bottom:0;
     padding-left: 1%;
     padding-right: 1%;
     width:20%;
@@ -168,10 +170,12 @@ margin-left: 5%;
     }
 
 
-@media only screen and (max-width: 1100px) {
+@media only screen and (max-width: 1200px) {
         .mobile_nav{display: block;}       
         .desktop_nav {display: none;}
         .navbar-custom-menu, .nav.navbar-nav{
           width:85%;
         }
     } 
+    
+

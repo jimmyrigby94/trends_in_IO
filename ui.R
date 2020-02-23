@@ -309,7 +309,7 @@ body <- dashboardBody(
         title = "Database Coverage",
         width = "100%",
         height = "100%",
-        DT::DTOutput(outputId = "coverage")
+        plotlyOutput(outputId = "coverage")
       )
     ),
     tabItem(tabName = "journal_selection",
