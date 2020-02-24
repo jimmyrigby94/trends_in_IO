@@ -178,4 +178,22 @@ margin-left: 5%;
         }
     } 
     
+.modal-header {
+    background: #a8605c;
+    width: 100%;
+    margin: 0;
+    padding: 2%;
+    text-align: center;
+    color: white;
+    margin-top:-20px;
+}
+
+.modal-body {
+  padding:0;
+}
+
+.modal-container {
+  padding: 15px;
+}
+    
 

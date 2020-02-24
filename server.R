@@ -1,12 +1,7 @@
 server <- function(input, output, session) {
 
 # Including the Modal 
-modal_output<-modalDialog(
-  tags$h2("Welcome to the Trends in IO Psychology Application"),
-  tags$hr(),
-  tags$p("As scientists search for new insights into the world of work, topics fall in and out of vogue. Perhaps, the most well-recognized swings in research interests occurred in personality research. In 1968, Walter Mischel concluded that “[w]ith the possible exception of intelligence, highly generalized behavioral consistencies have not been demonstrated, and the concept of personality traits as broad response predispositions is thus untenable.” Personality research slowed after Mischel's critique. Only a few decades later, however, personality research was back in style. Studies exploring personality and its outcomes become commonplace at the turn of the century. These investigations fueled meta-analyses that contended Mischel's claim. Identifying these trends (and slumps) can help researchers and practitioners see where the field has been, where it's going, and where it can grow."),
-  tags$p("This app was designed to help researchers and practitioners identify current trends in industrial-organizational psychology. It uses user-defined queries to search article abstracts in I-O psychology’s top scientific journals. Search results are plotted over time, and users have the option to focus on specific (or all) journals, and download a .csv file of their results."),
-  tags$p("To see the code, press the Github button below. To take a short tutorial on how to use the app, press the \"Begin Tutorial\" button. Close this window to skip the tutorial and start using the app."),
+modal_output<-modalDialog(includeHTML("modal-window.html"),
                           easyClose = TRUE,
                           size = "l",
                           fade = TRUE,
