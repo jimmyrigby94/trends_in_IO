@@ -118,6 +118,13 @@ showModal(modal_output)
                  removeModal()
                }
                )
+  
+  observeEvent(input$`relaunch-modal`,
+               {
+                 validate(need(input$`relaunch-modal` > 0, ''))
+                 showModal(modal_output)
+               }
+  )
 
 
 # launches js.intro

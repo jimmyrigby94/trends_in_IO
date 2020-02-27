@@ -117,7 +117,7 @@ header <- dashboardHeader(title = "Trends in I-O Psychology",
                               class = "mobile_nav"
                             ),
                             class = "dropdown",
-                            style = "width:100%; margin-top: 10px;height:100%;"
+                            style = "width:100%; height:100%;"
                           )
                           )
 
@@ -263,8 +263,7 @@ body <- dashboardBody(
       ")),
   # loading CSS
   tags$head(
-    tags$link(rel = "stylesheet", type = "text/css", href = "trends_in_IO_style.css")
-    
+    tags$link(rel = "stylesheet", type = "text/css", href = "trends_in_IO_style.css") 
   ),
 
   tabItems(
@@ -335,67 +334,46 @@ body <- dashboardBody(
               )
             )),
     tabItem(tabName = "about",
-            box(
-              h1("Trends in Industrial-Organizational Psychology"),
-              
-              h3(span("By"),
-                 em(
-                   a("James Rigby, M.A., University of Houston", href = "mailto:jrigby@uh.edu")
-                 ),
-                 span("and"),
-                 em(
-                   a("Zach Traylor, M.S., Texas A&M University", href = "mailto:zktraylor@gmail.com")
-                 )),
-              
-              p(
-                "The purpose of this application is to help quickly identify emerging
-                trends among major I-O journals (and related literatures) by counting and
-                plotting the frequency of term/phrase usage contained in the abstracts of scholarly
-                publications from 85 peer-reviewed journals between 1950 and May, 2019.
-                Users impute search term(s) and/or phrase(s), and the app then uses the query to identify relevant articles.
-                The raw search results are located in the \"Tables\" Menu under the \"Search Results\" tab.
-                Additional analytics are reported under the \"Dashboard\" tab, which includes publication frequency visualizations,
-                citation rate visualizations, and citation rate analytics."
+            fluidRow(
+              box(
+                tags$h2("Cite our Work"),
+                tags$hr(),
+                tags$div(tags$p("Rigby, J. R. & Traylor, Z.  (In Press). Capturing Trends in Industrial-Organizational Psychology: A Shiny Web Application.", tags$em("Human Performance"),
+                                class = "citation"),
+                         style = "font-size: 300%;")
+                
               ),
               
-              
-              p(
-                "Data were collected from SCOPUS (www.scopus.com).  The only requirement for inclusion in the operational database was that
-                articles must have been published in one of the journals listed under the \"Journal Selection\" tab.
-                After data were downloaded from SCOPUS, article metadata was verified and standardized within journal
-                because journal names and formatting have changed over the last 90 years.
-                In total, the operational database contains over 155,000 articles from 85 academic journals."
-              ),
-              
-              p(
-                "This application relies on four core functions to query the database, and each of which are heavily dependent on the tidyverse."
-              ),
-              
-              p(class = "textlist", "(1) table_prep() returns the raw search results."),
-              p(
-                class = "textlist",
-                "(2) tidy_trend_plot() plots the publication trends for articles matching the user-specified query."
-              ),
-              p(
-                class = "textlist",
-                "(3) cite_plot() returns a plot comparing the citation rates of articles matching the user-specified query."
-              ),
-              p(
-                class = "textlist",
-                "(4) cite_pred() returns the resultant statistical estimates of several poisson regression models predicting citation rates using a
-                binary indicator variable that stipulates whether the article matches the user-specified query.  The models are
-                estimated separately by decade in order to better explore whether and the extent to which the user-specified query became more or less popular over time."
-              ),
-              
-              p(
-                "Please note that this app is currently in Beta, and there are still a few bugs
-                that need to be resolved.  If you encounter any errors or have suggestions, please
-                feel free to contact either author using the above emails."
-              ),
-              
-              width = 12
-              ))
+              box(
+                tags$h2("Contact the Authors"),
+                tags$hr(),
+                tags$div(
+                  tags$p(a("James Rigby, M.A., University of Houston", href = "mailto:jrigby@uh.edu")),
+                  tags$p(a("Zach Traylor, M.S., Texas A&M University", href = "mailto:zktraylor@gmail.com")),
+                  style = "font-size:300%;"
+                )
+              )
+            ), 
+            fluidRow(
+              box(
+                tags$h2(icon("github"),"Explore our Code"),
+                tags$hr(),
+                tags$div(
+                  tags$p(
+                    tags$a("Repository", target = "_blank", href = "https://github.com/jimmyrigby94/trends_in_IO")
+                  ),
+                  tags$p(
+                    tags$a("Open an Issue", target = "_blank", href = "https://github.com/jimmyrigby94/trends_in_IO/issues")
+                  ),
+                  style = "font-size: 300%;"
+                )),
+              box(
+                tags$h2("Reopen the Introduction Window"),
+                actionButton("relaunch-modal", "Introduction Window", class = "btn2", style = "width:100%;")
               )
             )
+    )
+  ))
+
 
 ui <- dashboardPage(header, sidebar, body, skin = "purple")

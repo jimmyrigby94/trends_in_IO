@@ -83,8 +83,8 @@ p {font-size: 18px;}
     float:left;
     height:100%;
     font-size: 150%;
-    padding-top:0;
-    padding-bottom:0;
+    padding-top:9px;
+    padding-bottom:9px;
     padding-left: 1%;
     padding-right: 1%;
     width:20%;
@@ -134,8 +134,12 @@ p {font-size: 18px;}
     vertical-align: middle;
     padding:1%;
 }
+.btn2:hover, .btn2:active {
+    background: #555299;
+    color: white !important;
+}
 
-.btn2:hover, .btn2:active, .btn3:hover, .btn3:active .btn2:link, .btn3:link, .btn2:active, .btn3:active {
+.btn3:hover, .btn3:active, .btn3:active, .btn3:link {
     background: #a8605c;
     color: white !important;
 }
@@ -195,5 +199,21 @@ margin-left: 5%;
 .modal-container {
   padding: 15px;
 }
-    
 
+.citation-box{
+  border: solid;
+  margin-left:5%;
+  margin-right:5%;
+  border-width:thin;
+}
+
+.citation{
+    font-size: 16px;
+    text-indent: -16px;
+    padding-left: 16px;
+    margin:2%;
+}
+
+.citation:link {
+  color: black;
+}
