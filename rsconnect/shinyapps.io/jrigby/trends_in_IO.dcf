@@ -5,9 +5,9 @@ account: jrigby
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 362221
-bundleId: 2834829
+bundleId: 2835260
 url: https://jrigby.shinyapps.io/Trends_in_IO/
-when: 1582820422.68567
+when: 1582830839.1828
 asMultiple: FALSE
 asStatic: FALSE
-ignoredFiles: R|README.Rmd|.vs/ProjectSettings.json|.vs/slnx.sqlite|.vs/trends_in_IO/config/applicationhost.config|.vs/trends_in_IO/v16/.suo|dashboard_trends/.RData|dashboard_trends/.Rhistory|supl
+ignoredFiles: command.txt|R|README.md|README.Rmd|.vs/ProjectSettings.json|.vs/slnx.sqlite|.vs/trends_in_IO/config/applicationhost.config|.vs/trends_in_IO/v16/.suo|dashboard_trends/.RData|dashboard_trends/.Rhistory|dashboard_trends/app.R|supl

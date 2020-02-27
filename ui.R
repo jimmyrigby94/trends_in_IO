@@ -340,25 +340,14 @@ body <- dashboardBody(
     tabItem(tabName = "about",
             fluidRow(
               box(
-                tags$h2("Cite our Work"),
-                tags$hr(),
-                tags$div(tags$p("Rigby, J. R. & Traylor, Z.  (In Press). Capturing Trends in Industrial-Organizational Psychology: A Shiny Web Application.", tags$em("Human Performance"),
-                                class = "citation"),
-                         style = "font-size: 300%;")
-                
-              ),
-              
-              box(
-                tags$h2("Contact the Authors"),
+                tags$h2(icon("pen-alt"), "Cite our Work"),
                 tags$hr(),
                 tags$div(
-                  tags$p(a("James Rigby, M.A., University of Houston", href = "mailto:jrigby@uh.edu")),
-                  tags$p(a("Zach Traylor, M.S., Texas A&M University", href = "mailto:zktraylor@gmail.com")),
-                  style = "font-size:300%;"
-                )
-              )
-            ), 
-            fluidRow(
+                  tags$a(tags$p("Rigby, J. R. & Traylor, Z.  (In Press). Capturing Trends in Industrial-Organizational Psychology: A Shiny Web Application.", tags$em("Human Performance"),
+                                ", x(x), x-x.",
+                                class = "citation"), href = "#", target = "_blank"))
+                
+              ),
               box(
                 tags$h2(icon("github"),"Explore our Code"),
                 tags$hr(),
@@ -370,10 +359,21 @@ body <- dashboardBody(
                     tags$a("Open an Issue", target = "_blank", href = "https://github.com/jimmyrigby94/trends_in_IO/issues")
                   ),
                   style = "font-size: 300%;"
-                )),
+                ))
+            ), 
+            fluidRow(
               box(
-                tags$h2("Reopen the Introduction Window"),
+                tags$h2(icon("redo"), "Reopen the Introduction Window"),
                 actionButton("relaunch-modal", "Introduction Window", class = "btn2", style = "width:100%;")
+              ),
+              box(
+                tags$h2(icon("envelope"), "Contact the Authors"),
+                tags$hr(),
+                tags$div(
+                  tags$p(a("James Rigby, M.A., University of Houston", href = "mailto:jrigby@uh.edu")),
+                  tags$p(a("Zach Traylor, M.S., Texas A&M University", href = "mailto:zktraylor@gmail.com")),
+                  style = "font-size:300%;"
+                )
               )
             )
     )
