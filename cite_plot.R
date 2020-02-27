@@ -10,7 +10,7 @@ cite_plot <- function(data) {
   ggplotly(ggplot(data, aes(x = Year, y = `Citation Rate`, color = Present)) +
              geom_line() + 
              geom_point() +
-             scale_colour_manual(values = c("black", "red")) +
+             scale_colour_manual(values = c("red", "black")) +
              theme(panel.background = element_blank(),
                    panel.grid = element_blank(),
                    axis.line = element_line()) +

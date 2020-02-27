@@ -28,7 +28,7 @@ header <- dashboardHeader(title = "Trends in I-O Psychology",
                                       class = "mobile_nav"
                                     ),
                                     data.step = 11,
-                                    data.intro = "Click here to navigate to the main dashboard."
+                                    data.intro = "Click here to navigate to the main dashboard. This is where you are now."
                                   ),
                                   introBox(
                                     tags$div(
@@ -108,6 +108,7 @@ header <- dashboardHeader(title = "Trends in I-O Psychology",
                                   ),
                               data.step = 10,
                               data.intro = "You can navigate to different portions of the app using these buttons."),
+                            introBox(
                             tags$div(
                               actionButton("launchhelp", "Help", icon("question"), class = "btn2"),
                               class = "desktop_nav"
@@ -115,6 +116,9 @@ header <- dashboardHeader(title = "Trends in I-O Psychology",
                             tags$div(
                               actionButton("launchhelp2", "", icon("question"), class = "btn2", style = "position:absolute; top:0;"),
                               class = "mobile_nav"
+                            ),
+                            data.step = 18,
+                            data.intro="You can relaunch this tutorial at any time if you have any questions."
                             ),
                             class = "dropdown",
                             style = "width:100%; height:100%;"
@@ -160,7 +164,7 @@ sidebar <- dashboardSidebar(
             value = 1
           ),
           data.step = 4,
-          data.intro = "Sometimes an article may match your search by chance. You can increase the number of matching terms required to be included in your search results. This can reduce the number of false positives (Type I errors)."
+          data.intro = "Sometimes an article may match your search by chance. You can increase how many matching terms an article  must have to be considered a match. This can reduce the number of false positives (Type I errors)."
         ),
         tags$br(),
         introBox(
@@ -168,8 +172,8 @@ sidebar <- dashboardSidebar(
             inputId = "yearrange",
             label = "Published Betweeen",
             min = 1930,
-            max = 2019,
-            value = c(1930, 2019),
+            max = 2020,
+            value = c(1930, 2020),
             sep = ""
           ),
           data.step = 5,
@@ -198,7 +202,7 @@ sidebar <- dashboardSidebar(
           ),
           
           data.step = 7,
-          data.intro = "Select \"Yes\" if you are interested in plotting the proportion of articles matching your search on the y-axis. Select \"No\" if you want to plot the raw frequencies. <br><br> Note that proportions are based on SCOPUS database coverage.  Weak coverage will invariably result in
+          data.intro = "This toggle allows you to select whether you want to plot the proportion of articles that match your search or the raw frequencies. <br><br> Select \"Yes\" if you are interested in plotting the proportion of articles matching your search on the y-axis. Select \"No\" if you want to plot the raw frequencies. <br><br> Note that proportions are based on SCOPUS database coverage.  Weak coverage will invariably result in
           inaccurate proportion estimates, and earlier dates have notably weaker coverage."
         ),
         
@@ -210,7 +214,7 @@ sidebar <- dashboardSidebar(
             choices = c("Yes" = TRUE, "No" = FALSE)
           ),
           data.step = 8,
-          data.intro = "If you want to plot journals separately select \"Yes\" otherwise select \"No\"."
+          data.intro = "If you want to plot journals as separate lines select \"Yes\". Selecting \"No\" will plot frequencies across all journals included in your search."
         ),
         # download button
         introBox(
@@ -240,7 +244,7 @@ sidebar <- dashboardSidebar(
         )
     ),
     data.step = 1,
-    data.intro = "The sidebar contains the controls for changing what terms are searched for, where it's searched for, and how its visualized.<br><br> Let's see what we can do!"
+    data.intro = "The sidebar contains the controls for changing what terms are searched for, where they are searched for, and how they are visualized.<br><br> Let's see what we can do!"
 ),
 width = "350px"
 )
