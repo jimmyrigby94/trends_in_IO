@@ -343,8 +343,8 @@ body <- dashboardBody(
                 tags$h2(icon("pen-alt"), "Cite our Work"),
                 tags$hr(),
                 tags$div(
-                  tags$a(tags$p("Rigby, J. R. & Traylor, Z.  (In Press). Capturing Trends in Industrial-Organizational Psychology: A Shiny Web Application.", tags$em("Human Performance"),
-                                ", x(x), x-x.",
+                  tags$a(tags$p("Rigby, J. R. & Traylor, Z.  (in press). Capturing trends in industrial-organizational psychology: A shiny web application.", 
+                                tags$em("Human Performance"),
                                 class = "citation"), href = "#", target = "_blank"))
                 
               ),
