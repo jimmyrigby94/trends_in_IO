@@ -344,7 +344,7 @@ body <- dashboardBody(
                 tags$hr(),
                 tags$div(
                   tags$a(tags$p("Rigby, J. R. & Traylor, Z.  (in press). Capturing trends in industrial-organizational psychology: A shiny web application.", 
-                                tags$em("Human Performance"),
+                                tags$em("Human Performance."),
                                 class = "citation"), href = "#", target = "_blank"))
                 
               ),
