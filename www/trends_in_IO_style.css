@@ -217,3 +217,7 @@ margin-left: 5%;
 .citation:link {
   color: black;
 }
+
+.wrapper {
+  overflow: hidden;
+}
