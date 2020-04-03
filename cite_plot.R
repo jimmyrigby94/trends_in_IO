@@ -15,6 +15,7 @@ cite_plot <- function(data) {
                    panel.grid = element_blank(),
                    axis.line = element_line()) +
              guides(color = guide_legend(title = NULL)),
-           tooltip = c("x", "y"))
+           tooltip = c("x", "y"))%>%
+    layout(hovermode = 'compare')
   
 }
