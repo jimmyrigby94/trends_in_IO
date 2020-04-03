@@ -1,8 +1,4 @@
 /* Defining Parent Styles
-zoomed html out to account for large font size and figures*/
-html {
-  zoom: 80%;
-}
 
 h2 { 
   text-align: left; 
