@@ -118,7 +118,7 @@ header <- dashboardHeader(title = "Trends in I-O Psychology",
                               class = "mobile_nav"
                             ),
                             data.step = 18,
-                            data.intro="You can relaunch this tutorial at any time by navigating to the "About" tab at the top of the window."
+                            data.intro="You can relaunch this tutorial at any time by navigating to the \"About\" tab at the top of the window."
                             ),
                             class = "dropdown",
                             style = "width:100%; height:100%;"
@@ -139,7 +139,7 @@ sidebar <- dashboardSidebar(
             value = "personality, general mental ability"
           ),
           data.step = 2,
-          data.intro = "Enter your search terms or phrases here. <br><br> Separate multiple terms with a comma.  For example, if you wanted to search for abstracts that contain personality <em>OR</em> general mental ability, you would type: \"personality, general mental ability\". <br><br> Power users can also use regular expressions.  For example, if you were interested in searching for networks or networking, you would search \"network[[s]|[ing]]\"".
+          data.intro = "Enter your search terms or phrases here. <br><br> Separate multiple terms with a comma.  For example, if you wanted to search for abstracts that contain personality <em>OR</em> general mental ability, you would type: \"personality, general mental ability\". <br><br> Power users can also use regular expressions.  For example, if you were interested in searching for networks or networking, you would search \"network[[s]|[ing]]\"."
         ),
         tags$br(),
         introBox(
@@ -344,7 +344,10 @@ body <- dashboardBody(
                 tags$div(
                   tags$a(tags$p("Rigby, J., & Traylor, Z. (in press). Capturing trends in industrial-organizational psychology: A shiny web application.", 
                                 tags$em("Human Performance."),
-                                class = "citation"), href = "#", target = "_blank"))
+                                class = "citation"), href = "#", 
+                         # target = "_blank"
+                         )
+                  )
                 
               ),
               box(
@@ -357,8 +360,8 @@ body <- dashboardBody(
                   tags$p(
                     tags$a("Open an Issue", target = "_blank", href = "https://github.com/jimmyrigby94/trends_in_IO/issues")
                   ),
-                  style = "font-size: 300%;"
-                ))
+                  class="citation"
+                                                    ))
             ), 
             fluidRow(
               box(
@@ -371,7 +374,7 @@ body <- dashboardBody(
                 tags$div(
                   tags$p(a("James Rigby, M.A., University of Houston", href = "mailto:jrigby@uh.edu")),
                   tags$p(a("Zach Traylor, M.S., Texas A&M University", href = "mailto:zktraylor@gmail.com")),
-                  style = "font-size:300%;"
+                  class="citation"
                 )
               )
             )
