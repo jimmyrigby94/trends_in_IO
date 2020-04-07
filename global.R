@@ -85,7 +85,7 @@ j_names <- c(
   "Journal of Behavioral Decision Making" = "Journal of Behavioral Decision Making",
   "Journal of Business and Psychology" = "Journal of Business and Psychology",
   "Journal of Educational Measurement" = "Journal of Educational Measurement",
-  "Journal of Experimental Psychology: General" = "Journal of Experimental Psychology: General",
+  "Journal of Experimental Psychology: General" = "Journal of Experimental Psychology General",
   "Journal of Individual Differences" = "Journal of Individual Differences",
   "Journal of Leadership and Organizational Studies" = "Journal of Leadership and Organizational Studies",
   "Journal of Management Studies" = "Journal of Management Studies",
