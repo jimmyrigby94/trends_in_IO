@@ -1,9 +1,7 @@
 if(!require(shiny)){
   install.packages("shiny")
 }
-if(!require(shinyBS)){
-  install.packages('shinyBS')
-}
+
 if(!require(tidyverse)){
   install.packages('tidyverse')
 }
@@ -16,12 +14,7 @@ if(!require(plotly)){
 if(!require(knitr)){
   install.packages("knitr")
 }
-if(!require(vroom)){
-  install.packages("vroom")
-}
-if(!require(tippy)){
-  install.packages('tippy')
-}
+
 if(!require(shinydashboard)){
   install.packages('shinydashboard')
 }
@@ -39,12 +32,10 @@ if(!require(shinycssloaders)){
 }
 
 library(shiny)
-library(shinyBS)
 library(tidyverse)
 library(tidytext)
 library(plotly)
 library(knitr)
-library(vroom)
 library(shinydashboard)
 library(rintrojs)
 library(shinycssloaders)

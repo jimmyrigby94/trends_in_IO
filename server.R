@@ -66,20 +66,26 @@ showModal(modal_output)
       )
     })
   
+  update_plot1<-eventReactive(
+    input$plot,
+    tidy_trend_plot(
+      data = search_data(),
+      prop = input$prop,
+      byjourn = input$journ,
+      date = input$yearrange,
+      journals = input$journal
+    ),
+    ignoreNULL = FALSE
+  )
+  
 
 # Plots -------------------------------------------------------------------
 
   # plots publication trends
-  output$plot1 <-
-    renderPlotly({
-      tidy_trend_plot(
-        data = search_data(),
-        prop = input$prop,
-        byjourn = input$journ,
-        date = input$yearrange,
-        journals = input$journal
-      )
-    })
+  output$plot1 <- renderPlotly({
+    update_plot1()
+  })
+
   
   # plots citation rates
   output$plot2 <-

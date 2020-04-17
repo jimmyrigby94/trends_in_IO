@@ -12,13 +12,16 @@ This app was designed to help researchers and practitioners identify current tre
 In addition to R and R Studio, this app depends on the following packages:
 
     1. shiny
-    2. shinyBS
+    2. rintrojs
     3. shinydashboard
     4. tidyverse
     5. tidytext
     6. plotly
     7. knitr
-    8. vroom
+    8. shinycssloaders
+    9. shinyjs
+    10. DT
+
 
 Dependencies can easily be installed and loaded by running the following code.
 
@@ -43,10 +46,11 @@ runApp()
 ```
 
 ## What's New? 
-- Updated and simplified UI.
-- Added intro.js Tutorial.
-- Made cite-pred robust to null search results.
-- Corrected errors.
+
+### April 2020
+
+- Updated database
+- Bug fixes
 
 
 ## Future Improvements
@@ -66,6 +70,13 @@ runApp()
 
 
 ## Old Change Logs
+
+### February 2020
+- Updated and simplified UI
+- Added intro.js Tutorial
+- Made cite-pred robust to null search results
+- Corrected errors
+
 ### January 2020
 - Significant speed imporvements
 - Reorganization of internals
