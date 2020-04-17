@@ -13,7 +13,7 @@ cite_pred <- function(data) {
 
   temp <- count %>% 
           unnest(tidy_lm) %>%
-          ungroup() %>%
+          ungroup()%>%
           mutate(term = if_else(term == "(Intercept)", "Terms Not Present", "Terms Present")) %>%
           mutate_if(.predicate = is.numeric, funs(round), digits = 2)
   
