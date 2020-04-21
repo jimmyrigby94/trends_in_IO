@@ -239,7 +239,7 @@ sidebar <- dashboardSidebar(
         menuItem("",
                  tabName = "database_coverage",
                  selected = FALSE),
-        style = "font-size: 1.5em; margin-left: 2.5%;"
+        style = "margin-left: 2.5%;"
         )
     ),
     data.step = 1,
