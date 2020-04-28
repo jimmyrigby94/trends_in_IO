@@ -14,20 +14,22 @@ cite_pred <- function(data) {
   temp <- count %>% 
           unnest(tidy_lm) %>%
           ungroup()%>%
-          mutate(term = if_else(term == "(Intercept)", "Terms Not Present", "Terms Present")) %>%
-          mutate_if(.predicate = is.numeric, funs(round), digits = 2)
+          mutate(term = if_else(term == "(Intercept)", "Terms Not Present", "Terms Present"))
   
 
 
   temp2 <- left_join(temp %>% filter(term == "Terms Not Present") %>%
                        select(decade, estimate) %>% rename(Mean = estimate),
                      temp %>% filter(term != "Terms Not Present") %>% select(-term)) %>%
-                       mutate(`Estimate With` = round(exp(Mean + estimate),2), `Estimate Without` = round(exp(Mean),2)) %>%
+                       mutate(`Estimate With` = exp(Mean + estimate), `Estimate Without` = exp(Mean)) %>%
                        select(Decade = decade, `Estimate Without`, `Estimate With`, Effect = estimate,
                               `Standard Error` = std.error, `t` = statistic, `p` = p.value) %>%
                        arrange(Decade)%>%
-    mutate(`Estimate With` = if_else(is.na(`Estimate With`), "Not Enough Information", as.character(`Estimate With`)))%>%
+    mutate_if(.predicate = is.numeric, list(~format(round(., digits = 2), nsmall = 2)))%>%
+    mutate(`Estimate With` = if_else(`Estimate With`=="NA", "Not Enough Information", `Estimate With`))%>%
+    mutate_at(.vars = vars(Effect:p), ~if_else(. == "NA", "-", .))%>%
     as.data.frame(.)
+  
   
   temp2
 }

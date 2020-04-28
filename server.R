@@ -113,7 +113,15 @@ showModal(modal_output)
                          axis.line = element_line())+
                    guides(color = guide_legend(title = "")))
   
-  output$citetest <- DT::renderDT(citedinput())
+  output$citetest <- DT::renderDT(citedinput(), 
+                                  rownames = FALSE,
+                                  options = list(
+                                    columnDefs = list(
+                                      list(className = 'dt-center', targets = 1:6),
+                                      list(className = 'dt-left', targets = 0)
+                                      ),
+                                    dom = 't'
+                                  ))
 
 
 # Event Handlers ----------------------------------------------------------
