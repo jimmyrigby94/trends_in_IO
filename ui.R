@@ -219,12 +219,12 @@ sidebar <- dashboardSidebar(
         introBox(
           downloadButton(
             'my_trends',
-            'Download .CSV',
+            'Download .csv',
             icon = icon("download"),
             style = "color: black; margin-left: 15px; margin-bottom: 5px;"
           ),
           data.step = 9,
-          data.intro = "Click here to download your search results as a .CSV file."
+          data.intro = "Click here to download your search results as a .csv datafile."
         ),
         
         menuItem("",
@@ -339,11 +339,13 @@ body <- dashboardBody(
     tabItem(tabName = "about",
             fluidRow(
               box(
-                tags$h2(icon("pen-alt"), "Cite Our Work"),
+                tags$h2(icon("pen-alt"), "Please Cite Our Work"),
                 tags$hr(),
                 tags$div(
-                  tags$a(tags$p("Rigby, J., & Traylor, Z. (in press). Capturing trends in industrial-organizational psychology: A shiny web application.", 
+                  tags$a(tags$p("Rigby, J., & Traylor, Z. (2020). Capturing trends in industrial-organizational psychology: A shiny web application.", 
                                 tags$em("Human Performance."),
+                                "Advance online publication.",
+                                "https://doi.org/10.1080/08959285.2020.1751165",
                                 class = "citation"), href = "https://doi.org/10.1080/08959285.2020.1751165", 
                          target = "_blank"
                          )
