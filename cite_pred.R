@@ -3,9 +3,9 @@ cite_pred <- function(data) {
 
   # frequency counts for term/phrase matches per article
   count <- data %>% mutate(decade = cut(Year,
-                                        breaks = c(-Inf, 1960, 1970, 1980, 1990, 2000, 2010, 2020),
+                                        breaks = c(-Inf, 1960, 1970, 1980, 1990, 2000, 2010, 2020, Inf),
                                         right = TRUE,
-                                        labels = c("Pre-1960s", "1960s", "1970s", "1980s", "1990s", "2000s", "2010s"))) %>%
+                                        labels = c("Pre-1960s", "1960s", "1970s", "1980s", "1990s", "2000s", "2010s", '2020s'))) %>%
            group_by(decade) %>% 
            nest() %>%
            mutate(Model = map(data, cited_by_models), 
