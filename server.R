@@ -42,7 +42,15 @@ showModal(modal_output)
       init_selected<- c(init_selected, new_journals)
     }
     
-    search_abstract(data = master[master$`Source title` %in% input$journal,],
+    if(!is.null(input$author)){
+      author_index<-str_detect(master$Authors, input$author)
+    }else{
+      author_index<-rep(TRUE, times = nrow(master))
+    }
+    
+    journal_index<-master$`Source title` %in% input$journal
+    
+    search_abstract(data = master[author_index & journal_index,],
                     unigram = prepped_unigram(),
                     threshhold = input$cutoff,
                     date = input$yearrange)

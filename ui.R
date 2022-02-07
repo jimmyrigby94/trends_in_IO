@@ -135,11 +135,16 @@ sidebar <- dashboardSidebar(
         introBox(
           textInput(
             inputId = "oneword",
-            label = NULL,
+            label = "Query",
             value = "personality, general mental ability"
           ),
           data.step = 2,
           data.intro = "Enter your search terms or phrases here. <br><br> Separate multiple terms with a comma.  For example, if you wanted to search for abstracts that contain personality <em>OR</em> general mental ability, you would type: \"personality, general mental ability\". <br><br> Power users can also use regular expressions.  For example, if you were interested in searching for networks or networking, you would search \"network[[s]|[ing]]\"."
+        ),
+        textInput(
+          inputId = "author",
+          label = "Author",
+          value = NULL
         ),
         tags$br(),
         introBox(
