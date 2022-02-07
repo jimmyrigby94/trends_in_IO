@@ -172,8 +172,8 @@ sidebar <- dashboardSidebar(
             inputId = "yearrange",
             label = "Published Betweeen",
             min = 1930,
-            max = 2020,
-            value = c(1930, 2020),
+            max = 2021,
+            value = c(1930, 2021),
             sep = ""
           ),
           data.step = 5,
