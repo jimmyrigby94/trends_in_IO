@@ -31,6 +31,10 @@ if(!require(shinycssloaders)){
   install.packages("shinycssloaders")
 }
 
+if(!require(shinyjs)){
+  install.packages("shinyjs")
+}
+
 library(shiny)
 library(tidyverse)
 library(tidytext)
@@ -39,3 +43,4 @@ library(knitr)
 library(shinydashboard)
 library(rintrojs)
 library(shinycssloaders)
+library(shinyjs)
