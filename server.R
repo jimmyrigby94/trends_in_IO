@@ -42,7 +42,7 @@ showModal(modal_output)
       init_selected<- c(init_selected, new_journals)
     }
     
-    if(!is.null(input$author)){
+    if(!is.null(input$author) & nchar(input$author)>0){
       author_index<-str_detect(master$Authors, input$author)
     }else{
       author_index<-rep(TRUE, times = nrow(master))
