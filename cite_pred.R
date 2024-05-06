@@ -30,6 +30,5 @@ cite_pred <- function(data) {
     mutate_at(.vars = vars(Effect:p), ~if_else(. == "NA", "-", .))%>%
     as.data.frame(.)
   
-  
   temp2
 }
