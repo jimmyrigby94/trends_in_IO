@@ -37,7 +37,7 @@ showModal(modal_output)
     if(any(test_journals)){
       new_journals<-input$journal[test_journals]
       
-      master<-bind_rows(master, map_dfr(new_journals, ~read_rds(paste0("data/", ., ".rds"))))
+      master<-bind_rows(master, map_dfr(new_journals, ~tryCatch(read_rds(paste0("data/", ., ".rds")), error = function(e){data.frame()})))
       
       init_selected<- c(init_selected, new_journals)
     }
