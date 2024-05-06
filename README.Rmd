@@ -71,6 +71,10 @@ runApp()
 
 ## Old Change Logs
 
+### February 2024
+- Bug fix in author filter
+- Migrated data from SCOPUS to semantic scholar
+
 ### February 2020
 - Updated and simplified UI
 - Added intro.js Tutorial
@@ -78,7 +82,7 @@ runApp()
 - Corrected errors
 
 ### January 2020
-- Significant speed imporvements
+- Significant speed improvements
 - Reorganization of internals
 - Action button for new search
 - Correcting a few errors
